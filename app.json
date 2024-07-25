@@ -1,7 +1,7 @@
 {
   "name": "Ava Modules",
   "description": "Telegram Bot using Pyrogram",
-  "repository": "https://github.com/doraemon890/Ava-Unacademy",
+  "repository": "https://github.com/doraemon890/Unacademy",
   "env": {
     "API_ID": {
       "description": "Your Telegram API ID",
