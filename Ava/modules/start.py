@@ -315,12 +315,16 @@ async def send_documents(app, chat_id, category):
             if document_files:
                 await app.send_message(
                     chat_id,
-                    f"These Are the Materials For this Category: {category.replace('_', ' ').title()}",
+                    f"These are the materials for the category: {category.replace('_', ' ').title()}",
                     reply_markup=home_buttons
                 )
                 for doc in document_files:
-                    with open(os.path.join(folder_path, doc), "rb") as file:
-                        await app.send_document(chat_id, file)
+                    try:
+                        with open(os.path.join(folder_path, doc), "rb") as file:
+                            await app.send_document(chat_id, file)
+                    except Exception as e:
+                        print(f"Failed to send document {doc}: {e}")
+                        await app.send_message(chat_id, "Failed to send some documents.")
             else:
                 await app.send_message(chat_id, "No documents found in this category.")
         else:
@@ -330,56 +334,81 @@ async def send_documents(app, chat_id, category):
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
-    await message.reply(
-        "Welcome! Choose an option below.",
-        reply_markup=home_buttons
+    photo = random.choice(script.IMG)  # Select a random photo from the list
+    caption = script.START_TXT.format(message.from_user.mention)  # Format the caption
+    await message.reply_photo(
+        photo=photo,
+        caption=caption,
+        reply_markup=home_buttons  # Assuming home_buttons is your button markup
     )
-
 @app.on_callback_query()
-async def handle_callback(_, query):
+async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
+    new_text = ""
+    new_markup = None
+    
     if callback_data.startswith("home_"):
-        await query.message.edit_text("Welcome! Choose an option below.", reply_markup=home_buttons)
+        new_text = "Welcome! Choose an option below."
+        new_markup = home_buttons
     elif callback_data.startswith("modes_"):
-        await query.message.edit_text("Choose a mode.", reply_markup=modes_buttons)
+        new_text = "Choose a mode."
+        new_markup = modes_buttons
     elif callback_data.startswith("notes_"):
-        await query.message.edit_text("Choose a notes category.", reply_markup=notes_buttons)
+        new_text = "Choose a notes category."
+        new_markup = notes_buttons
     elif callback_data.startswith("elps_"):
-        await query.message.edit_text("Choose an ELPS category.", reply_markup=elps_buttons)
+        new_text = "Choose an ELPS category."
+        new_markup = elps_buttons
     elif callback_data.startswith("modules_"):
         if callback_data == "modules_3_1_":
-            await query.message.edit_text("Choose a version 3.1 module.", reply_markup=module_buttons_3_1)
+            new_text = "Choose a version 3.1 module."
+            new_markup = module_buttons_3_1
         elif callback_data == "modules_4_0_":
-            await query.message.edit_text("Choose a version 4.0 module.", reply_markup=module_buttons_4_0)
+            new_text = "Choose a version 4.0 module."
+            new_markup = module_buttons_4_0
         else:
-            await query.message.edit_text("Choose a module.", reply_markup=module_buttons)
+            new_text = "Choose a module."
+            new_markup = module_buttons
     elif callback_data.startswith("query_"):
-        await query.message.edit_text("Choose a query category.", reply_markup=query_buttons)
+        new_text = "Choose a query category."
+        new_markup = query_buttons
     elif callback_data.startswith("test_series_"):
-        await query.message.edit_text("Choose a test series.", reply_markup=test_series_buttons)
+        new_text = "Choose a test series."
+        new_markup = test_series_buttons
     elif callback_data.startswith("premium_"):
         if callback_data == "premium_material_seep_mam_":
-            await query.message.edit_text("Choose a SEEP MAM premium material.", reply_markup=premium_buttons_seep_mam)
+            new_text = "Choose a SEEP MAM premium material."
+            new_markup = premium_buttons_seep_mam
         elif callback_data == "premium_material_akansha_mam_":
-            await query.message.edit_text("Choose an AKANSHA MAM premium material.", reply_markup=premium_buttons_akansha_mam)
+            new_text = "Choose an AKANSHA MAM premium material."
+            new_markup = premium_buttons_akansha_mam
         else:
-            await query.message.edit_text("Choose a premium material.", reply_markup=premium_buttons)
+            new_text = "Choose a premium material."
+            new_markup = premium_buttons
     elif callback_data.startswith("supersix_"):
         if callback_data == "super_six_prateek_sir_":
-            await query.message.edit_text("Choose a PRATEEK SIR Super Six material.", reply_markup=supersix_buttons_prateek_sir)
+            new_text = "Choose a PRATEEK SIR Super Six material."
+            new_markup = supersix_buttons_prateek_sir
         elif callback_data == "super_six_akm_sir_":
-            await query.message.edit_text("Choose an AKM SIR Super Six material.", reply_markup=supersix_buttons_akm_sir)
+            new_text = "Choose an AKM SIR Super Six material."
+            new_markup = supersix_buttons_akm_sir
         elif callback_data == "super_six_skc_sir_":
-            await query.message.edit_text("Choose an SKC SIR Super Six material.", reply_markup=supersix_buttons_skc_sir)
+            new_text = "Choose an SKC SIR Super Six material."
+            new_markup = supersix_buttons_skc_sir
         elif callback_data == "super_six_rs_sir_":
-            await query.message.edit_text("Choose an RS SIR Super Six material.", reply_markup=supersix_buttons_rs_sir)
+            new_text = "Choose an RS SIR Super Six material."
+            new_markup = supersix_buttons_rs_sir
         else:
-            await query.message.edit_text("Choose a Super Six category.", reply_markup=supersix_buttons)
+            new_text = "Choose a Super Six category."
+            new_markup = supersix_buttons
     else:
         category = CATEGORY_MAPPING.get(callback_data, None)
         if category:
             await send_documents(app, query.message.chat.id, category)
-        else:
-            await query.message.edit_text("Invalid selection. Please try again.", reply_markup=home_buttons)
-
-
+            return  # Skip message edit if sending documents
+        new_text = "Invalid selection. Please try again."
+        new_markup = home_buttons
+    
+    # Edit the message if there's new text or markup
+    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
+        await query.message.edit_text(new_text, reply_markup=new_markup)
