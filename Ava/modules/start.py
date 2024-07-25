@@ -87,7 +87,8 @@ async def start(_, message):
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
-    print(f"Callback data received: {callback_data}")  # Debugging line to trace callback data
+    print(f"Callback data received: {callback_data}")  # Debugging line
+    
     new_text, new_markup = await get_new_text_and_markup(callback_data)
     
     category = CATEGORY_MAPPING.get(callback_data)
