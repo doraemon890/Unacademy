@@ -60,7 +60,6 @@ async def send_documents(app, chat_id, category):
                 await app.send_message(
                     chat_id,
                     f"These are the materials for the category: {category.replace('_', ' ').title()}",
-                    reply_markup=home_buttons  # Ensure home_buttons is defined
                 )
                 for doc in document_files:
                     try:
