@@ -1,5 +1,6 @@
 import os
-from pyrogram import filters, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import filters
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from Ava import app
 from Ava.core import script
 from Ava.core.func import subscribe, chk_user
