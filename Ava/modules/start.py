@@ -1,5 +1,6 @@
 import os
 import random
+import traceback
 from pyrogram import filters
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from Ava import app
@@ -84,24 +85,36 @@ async def start(_, message):
         reply_markup=home_buttons  # Ensure home_buttons is defined
     )
 
+async def handle_error(query: CallbackQuery, error_message: str):
+    error_details = traceback.format_exc()
+    print(f"Error occurred: {error_message}\nDetails: {error_details}")  # Log detailed error
+    await query.message.edit_text(f"An error occurred: {error_message}\nDetails: {error_details}", reply_markup=home_buttons)
+
+
+
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
     print(f"Callback data received: {callback_data}")  # Debugging line
-    
-    # Add debugging for specific handling functions
-    if callback_data.startswith("super_six"):
-        print(f"Super Six handling: {callback_data}")
 
-    new_text, new_markup = await get_new_text_and_markup(callback_data)
+    try:
+        # Check if callback data is for documents or a specific category
+        category = CATEGORY_MAPPING.get(callback_data)
+        if category:
+            await send_documents(app, query.message.chat.id, category)
+            return
+        
+        # Get new text and markup based on callback data
+        new_text, new_markup = await get_new_text_and_markup(callback_data)
+        
+        # Check if new text or markup needs to be updated
+        if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
+            await query.message.edit_text(new_text, reply_markup=new_markup)
+        else:
+            await handle_error(query, "An unexpected error occurred while processing the request.")
     
-    category = CATEGORY_MAPPING.get(callback_data)
-    if category:
-        await send_documents(app, query.message.chat.id, category)
-        return
-    
-    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
-        await query.message.edit_text(new_text, reply_markup=new_markup)
+    except Exception as e:
+        await handle_error(query, str(e))
 
 async def get_new_text_and_markup(callback_data):
     if callback_data == "home_":
@@ -127,7 +140,11 @@ async def get_new_text_and_markup(callback_data):
     elif callback_data.startswith("supersix_"):
         return await get_supersix_buttons(callback_data)
     else:
+        # Debugging line for unrecognized callback data
+        print(f"Unrecognized callback data: {callback_data}")
         return "Invalid selection. Please try again.", home_buttons
+
+
 
 # Additional functions for modules, premium materials, and Super Six
 async def get_module_buttons(callback_data):
@@ -147,16 +164,15 @@ async def get_premium_buttons(callback_data):
         return "Choose a premium material.", premium_buttons
 
 async def get_supersix_buttons(callback_data):
-    if callback_data == "supersix":
-        return "Choose a Super Six category.", supersix_buttons
-    elif callback_data == "super_six_prateek_sir":
+    if callback_data == "super_six_prateek_sir_":
         return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
-    elif callback_data == "super_six_akm_sir":
+    elif callback_data == "super_six_akm_sir_":
         return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
-    elif callback_data == "super_six_skc_sir":
+    elif callback_data == "super_six_skc_sir_":
         return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
-    elif callback_data == "super_six_rs_sir":
+    elif callback_data == "super_six_rs_sir_":
         return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
     else:
-        print(f"Unrecognized Super Six callback data: {callback_data}")  # Debugging line
+        # Debugging line for unrecognized Super Six callback data
+        print(f"Unrecognized Super Six callback data: {callback_data}")
         return "Invalid selection. Please try again.", supersix_buttons
