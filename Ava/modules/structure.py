@@ -60,7 +60,7 @@ support_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("ᴅᴇᴠᴇʟᴏᴘᴇʀ", url="https://t.me/JARVIS_V2")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
+        InlineKeyboardButton("Verify ✅", callback_data="home_")
     ]
 ])
 
