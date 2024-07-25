@@ -42,10 +42,11 @@ DOCUMENT_PATHS = {
     "super_six_rs_sir_dpp": "Ava/core/Documents/super_six_rs_sir_dpp/"
 }
 
-# Button Definitions
+# Helper function to create inline keyboard
 def create_inline_keyboard(buttons):
-    return InlineKeyboardMarkup([[InlineKeyboardButton(text, callback_data=data) for text, data in row] for row in buttons])
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text, url) if url.startswith("http") else InlineKeyboardButton(text, callback_data=url) for text, url in row] for row in buttons])
 
+# Button Definitions
 home_buttons = create_inline_keyboard([
     [("Support", "support_"), ("Unacademy Modules", "modes_")],
     [("Get Free Access✅", "force_")]
@@ -132,32 +133,4 @@ premium_buttons_prateek_sir = create_inline_keyboard([
 
 premium_buttons_akm_sir = create_inline_keyboard([
     [("Go Back ◀️", "premium_buttons_")]
-])
-
-supersix_buttons = create_inline_keyboard([
-    [("PRATEEK SIR", "super_six_prateek_sir"), ("AKM SIR", "super_six_akm_sir")],
-    [("SKC SIR", "super_six_skc_sir"), ("RS SIR", "super_six_rs_sir")],
-    [("Go Back ◀️", "modes")]
-])
-
-supersix_buttons_prateek_sir = create_inline_keyboard([
-    [("CLASS", "super_six_prateek_sir_class"), ("PHYSICSALCOHOLICS POINTS", "super_six_prateek_sir_physicsalcoholics_points")],
-    [("Go Back ◀️", "supersix")]
-])
-
-supersix_buttons_akm_sir = create_inline_keyboard([
-    [("COURSE", "super_six_akm_sir_course"), ("PYQ SERIES", "super_six_akm_sir_pyq_series")],
-    [("MODULE DISCUSSION", "super_six_akm_sir_module_discussion")],
-    [("Go Back ◀️", "supersix")]
-])
-
-supersix_buttons_skc_sir = create_inline_keyboard([
-    [("COURSE", "super_six_skc_sir_course"), ("ORGANIC MECHANISM", "super_six_skc_sir_organic_mechanism")],
-    [("DPP", "super_six_skc_sir_dpp")],
-    [("Go Back ◀️", "supersix")]
-])
-
-supersix_buttons_rs_sir = create_inline_keyboard([
-    [("COURSE", "super_six_rs_sir_course"), ("DPP", "super_six_rs_sir_dpp")],
-    [("Go Back ◀️", "supersix")]
 ])
