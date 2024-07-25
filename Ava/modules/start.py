@@ -4,6 +4,7 @@ from pyrogram import filters
 from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
+from Ava.core.Documents import *
 from Ava.modules.structure import *  # Ensure this imports all button definitions and paths
 
 # Define category mapping
