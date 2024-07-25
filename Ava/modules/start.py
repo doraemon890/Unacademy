@@ -92,10 +92,13 @@ async def handle_callback(_, query: CallbackQuery):
     
     # Determine the new text and markup based on callback_data
     if callback_data.startswith("home_"):
-        new_text = "Welcome! Choose an option below."
+        new_text = script.START_TXT
         new_markup = home_buttons
+    if callback_data.startswith("support_"):
+        new_text = script.SUPPORT_TXT 
+        new_markup = support_buttons
     elif callback_data.startswith("modes_"):
-        new_text = "Choose a mode."
+        new_text = script.MODES_TXT 
         new_markup = modes_buttons
     elif callback_data.startswith("notes_"):
         new_text = "Choose a notes category."
@@ -111,7 +114,7 @@ async def handle_callback(_, query: CallbackQuery):
             new_text = "Choose a version 4.0 module."
             new_markup = module_buttons_4_0
         else:
-            new_text = "Choose a module."
+            new_text = "Choose a module category."
             new_markup = module_buttons
     elif callback_data.startswith("query_"):
         new_text = "Choose a query category."
