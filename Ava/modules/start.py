@@ -63,7 +63,7 @@ async def send_documents(app, chat_id, category):
             if document_files:
                 await app.send_message(
                     chat_id,
-                    f"These are the materials for the category: {category.replace('_', ' ').title()}"
+                    f"ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}"
                 )
                 for doc in document_files:
                     try:
@@ -103,7 +103,7 @@ async def handle_callback(_, query: CallbackQuery):
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         if user_states.get(chat_id):
-            await app.send_message(chat_id, "You can't use two options simultaneously. Please wait until the current operation is finished.")
+            await app.send_message(chat_id, "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ.")
             return
         
         user_states[chat_id] = category
@@ -124,42 +124,42 @@ async def get_new_text_and_markup(callback_data):
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
     elif callback_data.startswith("notes_"):
-        return "Choose a notes category.", notes_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ɴᴏᴛᴇs ᴄᴀᴛᴇɢᴏʀʏ.", notes_buttons
     elif callback_data.startswith("elps_"):
-        return "Choose an ELPS category.", elps_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴇʟᴘs ᴄᴀᴛᴇɢᴏʀʏ.", elps_buttons
     elif callback_data.startswith("modules_"):
         return await get_module_buttons(callback_data)
     elif callback_data.startswith("query_"):
-        return "Choose a query category.", query_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ǫᴜᴇʀʏ ᴄᴀᴛᴇɢᴏʀʏ.", query_buttons
     elif callback_data.startswith("test_series_"):
-        return "Choose a test series.", test_series_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs.", test_series_buttons
     elif callback_data.startswith("supersix_"):
-        return "Choose a Super Six category.", supersix_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴜᴘᴇʀ sɪx ᴄᴀᴛᴇɢᴏʀʏ.", supersix_buttons
     elif callback_data.startswith("super_six_prateek_sir_"):
-        return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ Super Six material.", supersix_buttons_prateek_sir
     elif callback_data.startswith("super_six_akm_sir_"):
-        return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ Super Six material.", supersix_buttons_akm_sir
     elif callback_data.startswith("super_six_skc_sir_"):
-        return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ Super Six material.", supersix_buttons_skc_sir
     elif callback_data.startswith("super_six_rs_sir_"):
-        return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ Super Six material.", supersix_buttons_rs_sir
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
     else:
-        return "Invalid selection. Please try again.", home_buttons
+        return "ɪɴᴠᴀʟɪᴅ sᴇʟᴇᴄᴛɪᴏɴ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ.📛", home_buttons
 
 async def get_module_buttons(callback_data):
     if callback_data == "modules_3_1_":
-        return "Choose a version 3.1 module.", module_buttons_3_1
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 3.1 ᴍᴏᴅᴜʟᴇ.", module_buttons_3_1
     elif callback_data == "modules_4_0_":
-        return "Choose a version 4.0 module.", module_buttons_4_0
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 4.0 ᴍᴏᴅᴜʟᴇ.", module_buttons_4_0
     else:
-        return "Choose a module category.", module_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍᴏᴅᴜʟᴇ ᴄᴀᴛᴇɢᴏʀʏ.", module_buttons
 
 async def get_premium_buttons(callback_data):
     if callback_data == "premium_material_seep_mam_":
-        return "Choose a SEEP MAM premium material.", premium_buttons_seep_mam
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴇᴇᴘ ᴍᴀᴍ ᴘʀᴇᴍɪᴜᴍ ᴍᴀᴛᴇʀɪᴀʟ.", premium_buttons_seep_mam
     elif callback_data == "premium_material_akansha_mam_":
-        return "Choose an AKANSHA MAM premium material.", premium_buttons_akansha_mam
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴀɴsʜᴀ ᴍᴀᴍ ᴘʀᴇᴍɪᴜᴍ ᴍᴀᴛᴇʀɪᴀʟ.", premium_buttons_akansha_mam
     else:
-        return "Choose a premium material.", premium_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴍᴀᴛᴇʀɪᴀʟ.", premium_buttons
