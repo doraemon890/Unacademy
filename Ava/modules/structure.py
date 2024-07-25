@@ -236,60 +236,60 @@ premium_buttons_akm_sir = InlineKeyboardMarkup([
 
 supersix_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("PRATEEK SIR", callback_data="super_six_prateek_sir_"),
-        InlineKeyboardButton("AKM SIR", callback_data="super_six_akm_sir_")
+        InlineKeyboardButton("PRATEEK SIR", callback_data="super_six_prateek_sir"),
+        InlineKeyboardButton("AKM SIR", callback_data="super_six_akm_sir")
     ],
     [
-        InlineKeyboardButton("SKC SIR", callback_data="super_six_skc_sir_"),
-        InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir_")
+        InlineKeyboardButton("SKC SIR", callback_data="super_six_skc_sir"),
+        InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="modes")
     ]
 ])
 
 supersix_buttons_prateek_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("CLASS", callback_data="super_six_prateek_sir_class_"),
-        InlineKeyboardButton("PHYSICSALCOHOLICS POINTS", callback_data="super_six_prateek_sir_physicsalcoholics_points_")
+        InlineKeyboardButton("CLASS", callback_data="super_six_prateek_sir_class"),
+        InlineKeyboardButton("PHYSICSALCOHOLICS POINTS", callback_data="super_six_prateek_sir_physicsalcoholics_points")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix")
     ]
 ])
 
 supersix_buttons_akm_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_akm_sir_course_"),
-        InlineKeyboardButton("PYQ SERIES", callback_data="super_six_akm_sir_pyq_series_")
+        InlineKeyboardButton("COURSE", callback_data="super_six_akm_sir_course"),
+        InlineKeyboardButton("PYQ SERIES", callback_data="super_six_akm_sir_pyq_series")
     ],
     [
-        InlineKeyboardButton("MODULE DISCUSSION", callback_data="super_six_akm_sir_module_discussion_")
+        InlineKeyboardButton("MODULE DISCUSSION", callback_data="super_six_akm_sir_module_discussion")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix")
     ]
 ])
 
 supersix_buttons_skc_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_skc_sir_course_"),
-        InlineKeyboardButton("ORGANIC MECHANISM", callback_data="super_six_skc_sir_organic_mechanism_")
+        InlineKeyboardButton("COURSE", callback_data="super_six_skc_sir_course"),
+        InlineKeyboardButton("ORGANIC MECHANISM", callback_data="super_six_skc_sir_organic_mechanism")
     ],
     [
-        InlineKeyboardButton("DPP", callback_data="super_six_skc_sir_dpp_")
+        InlineKeyboardButton("DPP", callback_data="super_six_skc_sir_dpp")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix")
     ]
 ])
 
 supersix_buttons_rs_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_rs_sir_course_"),
-        InlineKeyboardButton("DPP", callback_data="super_six_rs_sir_dpp_")
+        InlineKeyboardButton("COURSE", callback_data="super_six_rs_sir_course"),
+        InlineKeyboardButton("DPP", callback_data="super_six_rs_sir_dpp")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix")
     ]
 ])
