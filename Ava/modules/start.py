@@ -89,6 +89,10 @@ async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
     print(f"Callback data received: {callback_data}")  # Debugging line
     
+    # Add debugging for specific handling functions
+    if callback_data.startswith("super_six"):
+        print(f"Super Six handling: {callback_data}")
+
     new_text, new_markup = await get_new_text_and_markup(callback_data)
     
     category = CATEGORY_MAPPING.get(callback_data)
