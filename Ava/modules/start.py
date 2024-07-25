@@ -121,7 +121,7 @@ async def get_new_text_and_markup(callback_data):
         return "Choose a test series.", test_series_buttons
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
-     elif callback_data.startswith("supersix_"):
+    elif callback_data.startswith("supersix_"):
         return await get_supersix_buttons(callback_data)    
     else:
         return "Invalid selection. Please try again.", home_buttons
