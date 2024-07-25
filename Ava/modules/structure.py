@@ -48,9 +48,30 @@ home_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("Unacademy Modules", callback_data="modes_")
     ],
     [
-        InlineKeyboardButton("Get Free Access✅", callback_data="premium_")
+        InlineKeyboardButton("Get Free Access✅", callback_data="force_")
     ]
 ])
+
+
+# Button Definitions
+support_buttons = InlineKeyboardMarkup([
+    [
+        InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ", url="https://t.me/JARVIS_V_SUPPORT"),
+        InlineKeyboardButton("ᴅᴇᴠᴇʟᴏᴘᴇʀ", url="https://t.me/JARVIS_V2")
+    ],
+    [
+        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
+    ]
+])
+
+
+force_buttons = InlineKeyboardMarkup([
+    [
+        InlineKeyboardButton("ᴊᴏɪɴ", url="https://t.me/JARVIS_V_SUPPORT"),
+        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
+    ],
+])
+
 
 modes_buttons = InlineKeyboardMarkup([
     [
