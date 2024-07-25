@@ -4,8 +4,7 @@ from pyrogram import filters
 from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
-from Ava.modules.structure import *
-
+from Ava.modules.structure import *  # Ensure this imports all button definitions and paths
 
 # Define category mapping
 CATEGORY_MAPPING = {
@@ -58,7 +57,7 @@ async def send_documents(app, chat_id, category):
                 await app.send_message(
                     chat_id,
                     f"These are the materials for the category: {category.replace('_', ' ').title()}",
-                    reply_markup=home_buttons
+                    reply_markup=home_buttons  # Ensure home_buttons is defined
                 )
                 for doc in document_files:
                     try:
@@ -76,12 +75,12 @@ async def send_documents(app, chat_id, category):
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
-    photo = random.choice(script.IMG)  # Select a random photo from the list
-    caption = script.START_TXT.format(message.from_user.mention)  # Format the caption
+    photo = random.choice(script.IMG)  # Ensure script.IMG is defined
+    caption = script.START_TXT.format(message.from_user.mention)  # Ensure script.START_TXT is defined
     await message.reply_photo(
         photo=photo,
         caption=caption,
-        reply_markup=home_buttons
+        reply_markup=home_buttons  # Ensure home_buttons is defined
     )
 
 @app.on_callback_query()
