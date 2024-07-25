@@ -1,15 +1,15 @@
+
 import os
+from os import getenv
 
-# Retrieve environment variables and convert them to the appropriate types
-API_ID = int(os.getenv("API_ID"))
-API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-BOT_USERNAME = os.getenv("BOT_USERNAME")
-OWNER_ID = int(os.getenv("OWNER_ID"))
+API_ID = int(os.environ.get("API_ID"))
 
-# Define fixed values
-SUDO_USERS = "7044783841"
-CHANNEL_ID = "-1002094238295"
+API_HASH = os.environ.get("API_HASH")
 
-# Database connection URL
-MONGO_URL = os.getenv("MONGO_URL")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_USERNAME = os.environ.get("BOT_USERNAME")
+OWNER_ID = int(os.environ.get("OWNER_ID"))
+
+SUDO_USERS = list(map(int, getenv("SUDO_USERS", "").split()))
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID"))
+MONGO_URL = os.environ.get("MONGO_URL")
