@@ -244,10 +244,9 @@ supersix_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")  
+        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")
     ]
 ])
-
 
 supersix_buttons_prateek_sir = InlineKeyboardMarkup([
     [
@@ -258,7 +257,6 @@ supersix_buttons_prateek_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
-
 
 supersix_buttons_akm_sir = InlineKeyboardMarkup([
     [
@@ -285,7 +283,6 @@ supersix_buttons_skc_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
-
 
 supersix_buttons_rs_sir = InlineKeyboardMarkup([
     [
