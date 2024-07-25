@@ -87,78 +87,68 @@ async def start(_, message):
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
-    new_text = ""
-    new_markup = None
+    new_text, new_markup = await get_new_text_and_markup(callback_data)
     
-    # Determine the new text and markup based on callback_data
-    if callback_data.startswith("home_"):
-        new_text = script.START_TXT
-        new_markup = home_buttons
-    if callback_data.startswith("support_"):
-        new_text = script.SUPPORT_TXT 
-        new_markup = support_buttons
-    if callback_data.startswith("force_"):
-        new_text = script.FORCE_MSG 
-        new_markup = force_buttons
-    elif callback_data.startswith("modes_"):
-        new_text = script.MODES_TXT 
-        new_markup = modes_buttons
-    elif callback_data.startswith("notes_"):
-        new_text = "Choose a notes category."
-        new_markup = notes_buttons
-    elif callback_data.startswith("elps_"):
-        new_text = "Choose an ELPS category."
-        new_markup = elps_buttons
-    elif callback_data.startswith("modules_"):
-        if callback_data == "modules_3_1_":
-            new_text = "Choose a version 3.1 module."
-            new_markup = module_buttons_3_1
-        elif callback_data == "modules_4_0_":
-            new_text = "Choose a version 4.0 module."
-            new_markup = module_buttons_4_0
-        else:
-            new_text = "Choose a module category."
-            new_markup = module_buttons
-    elif callback_data.startswith("query_"):
-        new_text = "Choose a query category."
-        new_markup = query_buttons
-    elif callback_data.startswith("test_series_"):
-        new_text = "Choose a test series."
-        new_markup = test_series_buttons
-    elif callback_data.startswith("premium_"):
-        if callback_data == "premium_material_seep_mam_":
-            new_text = "Choose a SEEP MAM premium material."
-            new_markup = premium_buttons_seep_mam
-        elif callback_data == "premium_material_akansha_mam_":
-            new_text = "Choose an AKANSHA MAM premium material."
-            new_markup = premium_buttons_akansha_mam
-        else:
-            new_text = "Choose a premium material."
-            new_markup = premium_buttons
-    elif callback_data.startswith("supersix_"):
-        if callback_data == "super_six_prateek_sir_":
-            new_text = "Choose a PRATEEK SIR Super Six material."
-            new_markup = supersix_buttons_prateek_sir
-        elif callback_data == "super_six_akm_sir_":
-            new_text = "Choose an AKM SIR Super Six material."
-            new_markup = supersix_buttons_akm_sir
-        elif callback_data == "super_six_skc_sir_":
-            new_text = "Choose an SKC SIR Super Six material."
-            new_markup = supersix_buttons_skc_sir
-        elif callback_data == "super_six_rs_sir_":
-            new_text = "Choose an RS SIR Super Six material."
-            new_markup = supersix_buttons_rs_sir
-        else:
-            new_text = "Choose a Super Six category."
-            new_markup = supersix_buttons
-    else:
-        category = CATEGORY_MAPPING.get(callback_data, None)
-        if category:
-            await send_documents(app, query.message.chat.id, category)
-            return  # Skip message edit if sending documents
-        new_text = "Invalid selection. Please try again."
-        new_markup = home_buttons
+    # Handle document sending
+    category = CATEGORY_MAPPING.get(callback_data)
+    if category:
+        await send_documents(app, query.message.chat.id, category)
+        return
     
-    # Edit the message if there's new text or markup
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
+
+async def get_new_text_and_markup(callback_data):
+    if callback_data.startswith("home_"):
+        return script.START_TXT, home_buttons
+    elif callback_data.startswith("support_"):
+        return script.SUPPORT_TXT, support_buttons
+    elif callback_data.startswith("force_"):
+        return script.FORCE_MSG, force_buttons
+    elif callback_data.startswith("modes_"):
+        return script.MODES_TXT, modes_buttons
+    elif callback_data.startswith("notes_"):
+        return "Choose a notes category.", notes_buttons
+    elif callback_data.startswith("elps_"):
+        return "Choose an ELPS category.", elps_buttons
+    elif callback_data.startswith("modules_"):
+        return await get_module_buttons(callback_data)
+    elif callback_data.startswith("query_"):
+        return "Choose a query category.", query_buttons
+    elif callback_data.startswith("test_series_"):
+        return "Choose a test series.", test_series_buttons
+    elif callback_data.startswith("premium_"):
+        return await get_premium_buttons(callback_data)
+    elif callback_data.startswith("supersix_"):
+        return await get_supersix_buttons(callback_data)
+    else:
+        return "Invalid selection. Please try again.", home_buttons
+
+# Additional functions for modules, premium materials, and Super Six
+async def get_module_buttons(callback_data):
+    if callback_data == "modules_3_1_":
+        return "Choose a version 3.1 module.", module_buttons_3_1
+    elif callback_data == "modules_4_0_":
+        return "Choose a version 4.0 module.", module_buttons_4_0
+    else:
+        return "Choose a module category.", module_buttons
+
+async def get_premium_buttons(callback_data):
+    if callback_data == "premium_material_seep_mam_":
+        return "Choose a SEEP MAM premium material.", premium_buttons_seep_mam
+    elif callback_data == "premium_material_akansha_mam_":
+        return "Choose an AKANSHA MAM premium material.", premium_buttons_akansha_mam
+    else:
+        return "Choose a premium material.", premium_buttons
+
+async def get_supersix_buttons(callback_data):
+    if callback_data == "super_six_prateek_sir_":
+        return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
+    elif callback_data == "super_six_akm_sir_":
+        return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
+    elif callback_data == "super_six_skc_sir_":
+        return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
+    elif callback_data == "super_six_rs_sir_":
+        return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
+    else:
+        return "Choose a Super Six category.", supersix_buttons
