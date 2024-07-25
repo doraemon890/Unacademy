@@ -23,14 +23,6 @@
       "description": "Your Telegram User ID (Owner)",
       "required": true
     },
-    "SUDO_USERS": {
-      "description": "Comma-separated list of sudo users' IDs",
-      "required": false
-    },
-    "CHANNEL_ID": {
-      "description": "Your channel ID",
-      "required": true
-    },
     "MONGO_URL": {
       "description": "Your MongoDB URL",
       "required": true
