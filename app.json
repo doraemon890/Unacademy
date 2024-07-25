@@ -26,7 +26,8 @@
     "MONGO_URL": {
       "description": "Your MongoDB URL",
       "required": true
-    },
+    }
+  },
   "stack": "heroku-22",
   "addons": [],
   "buildpacks": [
