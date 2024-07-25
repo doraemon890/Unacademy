@@ -1,12 +1,11 @@
 import os
 import random
-import traceback
 from pyrogram import filters
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
-from Ava.core.Documents import *
-from Ava.modules.structure import *  # Ensure this imports all button definitions and paths
+from Ava.core.Documents import DOCUMENT_PATHS
+from Ava.modules.structure import *
 
 # Define category mapping
 CATEGORY_MAPPING = {
@@ -54,11 +53,14 @@ async def send_documents(app, chat_id, category):
     if category in DOCUMENT_PATHS:
         folder_path = DOCUMENT_PATHS[category]
         if os.path.exists(folder_path):
-            document_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+            document_files = [
+                f for f in os.listdir(folder_path) 
+                if os.path.isfile(os.path.join(folder_path, f))
+            ]
             if document_files:
                 await app.send_message(
                     chat_id,
-                    f"These are the materials for the category: {category.replace('_', ' ').title()}",
+                    f"These are the materials for the category: {category.replace('_', ' ').title()}"
                 )
                 for doc in document_files:
                     try:
@@ -77,53 +79,35 @@ async def send_documents(app, chat_id, category):
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
-    photo = random.choice(script.IMG)  # Ensure script.IMG is defined
-    caption = script.START_TXT.format(message.from_user.mention)  # Ensure script.START_TXT is defined
+    photo = random.choice(script.IMG)
+    caption = script.START_TXT.format(message.from_user.mention)
     await message.reply_photo(
         photo=photo,
         caption=caption,
-        reply_markup=home_buttons  # Ensure home_buttons is defined
+        reply_markup=home_buttons
     )
-
-async def handle_error(query: CallbackQuery, error_message: str):
-    error_details = traceback.format_exc()
-    print(f"Error occurred: {error_message}\nDetails: {error_details}")  # Log detailed error
-    await query.message.edit_text(f"An error occurred: {error_message}\nDetails: {error_details}", reply_markup=home_buttons)
-
-
 
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
-    print(f"Callback data received: {callback_data}")  # Debugging line
-
-    try:
-        # Check if callback data is for documents or a specific category
-        category = CATEGORY_MAPPING.get(callback_data)
-        if category:
-            await send_documents(app, query.message.chat.id, category)
-            return
-        
-        # Get new text and markup based on callback data
-        new_text, new_markup = await get_new_text_and_markup(callback_data)
-        
-        # Check if new text or markup needs to be updated
-        if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
-            await query.message.edit_text(new_text, reply_markup=new_markup)
-        else:
-            await handle_error(query, "An unexpected error occurred while processing the request.")
+    new_text, new_markup = await get_new_text_and_markup(callback_data)
     
-    except Exception as e:
-        await handle_error(query, str(e))
+    category = CATEGORY_MAPPING.get(callback_data)
+    if category:
+        await send_documents(app, query.message.chat.id, category)
+        return
+    
+    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
+        await query.message.edit_text(new_text, reply_markup=new_markup)
 
 async def get_new_text_and_markup(callback_data):
-    if callback_data == "home_":
+    if callback_data.startswith("home_"):
         return script.START_TXT, home_buttons
-    elif callback_data == "support_":
+    elif callback_data.startswith("support_"):
         return script.SUPPORT_TXT, support_buttons
-    elif callback_data == "force_":
+    elif callback_data.startswith("force_"):
         return script.FORCE_MSG, force_buttons
-    elif callback_data == "modes_":
+    elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
     elif callback_data.startswith("notes_"):
         return "Choose a notes category.", notes_buttons
@@ -137,16 +121,9 @@ async def get_new_text_and_markup(callback_data):
         return "Choose a test series.", test_series_buttons
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
-    elif callback_data.startswith("supersix_"):
-        return await get_supersix_buttons(callback_data)
     else:
-        # Debugging line for unrecognized callback data
-        print(f"Unrecognized callback data: {callback_data}")
         return "Invalid selection. Please try again.", home_buttons
 
-
-
-# Additional functions for modules, premium materials, and Super Six
 async def get_module_buttons(callback_data):
     if callback_data == "modules_3_1_":
         return "Choose a version 3.1 module.", module_buttons_3_1
@@ -162,17 +139,3 @@ async def get_premium_buttons(callback_data):
         return "Choose an AKANSHA MAM premium material.", premium_buttons_akansha_mam
     else:
         return "Choose a premium material.", premium_buttons
-
-async def get_supersix_buttons(callback_data):
-    if callback_data == "super_six_prateek_sir_":
-        return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
-    elif callback_data == "super_six_akm_sir_":
-        return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
-    elif callback_data == "super_six_skc_sir_":
-        return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
-    elif callback_data == "super_six_rs_sir_":
-        return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
-    else:
-        # Debugging line for unrecognized Super Six callback data
-        print(f"Unrecognized Super Six callback data: {callback_data}")
-        return "Invalid selection. Please try again.", supersix_buttons
