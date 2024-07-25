@@ -86,7 +86,7 @@ modes_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("Queries", callback_data="query_")
     ],
     [
-        InlineKeyboardButton("Super Six", callback_data="super_six_prateek_sir_"),
+        InlineKeyboardButton("Super Six", callback_data="supersix_"),
         InlineKeyboardButton("Premium Materials", callback_data="premium_")
     ],
     [
