@@ -49,6 +49,9 @@ CATEGORY_MAPPING = {
     "super_six_rs_sir_dpp_": "super_six_rs_sir_dpp",
 }
 
+# Dictionary to keep track of user states
+user_states = {}
+
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_PATHS:
         folder_path = DOCUMENT_PATHS[category]
@@ -76,6 +79,9 @@ async def send_documents(app, chat_id, category):
             await app.send_message(chat_id, "Category folder not found.")
     else:
         await app.send_message(chat_id, "Invalid category.")
+    
+    # Clear the user state after sending documents
+    user_states[chat_id] = None
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
@@ -89,14 +95,22 @@ async def start(_, message):
 
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
+    chat_id = query.message.chat.id
     callback_data = query.data
     new_text, new_markup = await get_new_text_and_markup(callback_data)
     
+    # Handle category requests
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
-        await send_documents(app, query.message.chat.id, category)
+        if user_states.get(chat_id):
+            await app.send_message(chat_id, "You can't use two options simultaneously. Please wait until the current operation is finished.")
+            return
+        
+        user_states[chat_id] = category
+        await send_documents(app, chat_id, category)
         return
-    
+
+    # Handle other callback types
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
 
