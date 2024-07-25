@@ -86,7 +86,7 @@ modes_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("Queries", callback_data="query_")
     ],
     [
-        InlineKeyboardButton("Super Six", callback_data="supersix_"),
+        InlineKeyboardButton("Super Six", callback_data="super_six_prateek_sir_"),
         InlineKeyboardButton("Premium Materials", callback_data="premium_")
     ],
     [
@@ -235,7 +235,7 @@ premium_buttons_akm_sir = InlineKeyboardMarkup([
 ])
 
 supersix_buttons = InlineKeyboardMarkup([
-    [
+   [
         InlineKeyboardButton("PRATEEK SIR", callback_data="super_six_prateek_sir_"),
         InlineKeyboardButton("AKM SIR", callback_data="super_six_akm_sir_")
     ],
