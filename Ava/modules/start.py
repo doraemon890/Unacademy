@@ -123,7 +123,6 @@ async def get_new_text_and_markup(callback_data):
     elif callback_data.startswith("supersix_"):
         return await get_supersix_buttons(callback_data)
     else:
-        print(f"Unrecognized callback data: {callback_data}")  # Debugging line
         return "Invalid selection. Please try again.", home_buttons
 
 # Additional functions for modules, premium materials, and Super Six
@@ -144,15 +143,15 @@ async def get_premium_buttons(callback_data):
         return "Choose a premium material.", premium_buttons
 
 async def get_supersix_buttons(callback_data):
-    if callback_data == "supersix_":
+    if callback_data == "supersix":
         return "Choose a Super Six category.", supersix_buttons
-    elif callback_data == "super_six_prateek_sir_":
+    elif callback_data == "super_six_prateek_sir":
         return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
-    elif callback_data == "super_six_akm_sir_":
+    elif callback_data == "super_six_akm_sir":
         return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
-    elif callback_data == "super_six_skc_sir_":
+    elif callback_data == "super_six_skc_sir":
         return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
-    elif callback_data == "super_six_rs_sir_":
+    elif callback_data == "super_six_rs_sir":
         return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
     else:
         print(f"Unrecognized Super Six callback data: {callback_data}")  # Debugging line
