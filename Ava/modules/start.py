@@ -50,8 +50,10 @@ CATEGORY_MAPPING = {
 }
 
 async def send_documents(app, chat_id, category):
+    print(f"Requested category: {category}")  # Debugging output
     if category in DOCUMENT_PATHS:
         folder_path = DOCUMENT_PATHS[category]
+        print(f"Folder path for category '{category}': {folder_path}")  # Debugging output
         if os.path.exists(folder_path):
             document_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
             if document_files:
@@ -87,7 +89,7 @@ async def start(_, message):
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
-    print(f"Received callback data: {callback_data}")
+    print(f"Received callback data: {callback_data}")  # Debugging output
     new_text, new_markup = await get_new_text_and_markup(callback_data)
     
     category = CATEGORY_MAPPING.get(callback_data)
@@ -97,7 +99,6 @@ async def handle_callback(_, query: CallbackQuery):
     
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
-
 
 async def get_new_text_and_markup(callback_data):
     if callback_data.startswith("home_"):
