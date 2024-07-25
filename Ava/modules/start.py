@@ -136,13 +136,13 @@ async def get_new_text_and_markup(callback_data):
     elif callback_data.startswith("supersix_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴜᴘᴇʀ sɪx ᴄᴀᴛᴇɢᴏʀʏ.", supersix_buttons
     elif callback_data.startswith("super_six_prateek_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ Super Six material.", supersix_buttons_prateek_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_prateek_sir
     elif callback_data.startswith("super_six_akm_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ Super Six material.", supersix_buttons_akm_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_akm_sir
     elif callback_data.startswith("super_six_skc_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ Super Six material.", supersix_buttons_skc_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_skc_sir
     elif callback_data.startswith("super_six_rs_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ Super Six material.", supersix_buttons_rs_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_rs_sir
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
     else:
