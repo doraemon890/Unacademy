@@ -44,7 +44,7 @@ DOCUMENT_PATHS = {
 
 # Helper function to create inline keyboard
 def create_inline_keyboard(buttons):
-    return InlineKeyboardMarkup([[InlineKeyboardButton(text, url) if url.startswith("http") else InlineKeyboardButton(text, callback_data=url) for text, url in row] for row in buttons])
+    return InlineKeyboardMarkup([[InlineKeyboardButton(text, url) if url.startswith("https") else InlineKeyboardButton(text, callback_data=url) for text, url in row] for row in buttons])
 
 # Button Definitions
 home_buttons = create_inline_keyboard([
