@@ -1,4 +1,5 @@
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from Ava.core.Documents import *
 
 # Define paths for each document category
 DOCUMENT_PATHS = {
@@ -142,7 +143,7 @@ module_buttons_3_1 = InlineKeyboardMarkup([
         InlineKeyboardButton("BIOLOGY", callback_data="modules_3_1_biology_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="module_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="modules_")
     ]
 ])
 
@@ -155,7 +156,7 @@ module_buttons_4_0 = InlineKeyboardMarkup([
         InlineKeyboardButton("BIOLOGY", callback_data="modules_4_0_biology_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="module_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="modules_")
     ]
 ])
 
@@ -193,7 +194,7 @@ premium_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("AKM SIR", callback_data="premium_material_akm_sir_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")
     ]
 ])
 
@@ -243,9 +244,10 @@ supersix_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")  
     ]
 ])
+
 
 supersix_buttons_prateek_sir = InlineKeyboardMarkup([
     [
@@ -253,9 +255,10 @@ supersix_buttons_prateek_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("PHYSICSALCOHOLICS POINTS", callback_data="super_six_prateek_sir_physicsalcoholics_points_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
+
 
 supersix_buttons_akm_sir = InlineKeyboardMarkup([
     [
@@ -266,7 +269,7 @@ supersix_buttons_akm_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("MODULE DISCUSSION", callback_data="super_six_akm_sir_module_discussion_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
 
@@ -279,9 +282,10 @@ supersix_buttons_skc_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("DPP", callback_data="super_six_skc_sir_dpp_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
+
 
 supersix_buttons_rs_sir = InlineKeyboardMarkup([
     [
@@ -289,6 +293,6 @@ supersix_buttons_rs_sir = InlineKeyboardMarkup([
         InlineKeyboardButton("DPP", callback_data="super_six_rs_sir_dpp_")
     ],
     [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_buttons_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
     ]
 ])
