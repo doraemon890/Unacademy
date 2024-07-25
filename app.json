@@ -28,7 +28,7 @@
       "required": true
     }
   },
-  "stack": "heroku-22",
+  "stack": "heroku-24",
   "addons": [],
   "buildpacks": [
     {
