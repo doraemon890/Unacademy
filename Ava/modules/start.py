@@ -61,8 +61,10 @@ async def send_documents(app, chat_id, category):
                 )
                 for doc in document_files:
                     try:
-                        with open(os.path.join(folder_path, doc), "rb") as file:
-                            await app.send_document(chat_id, file)
+                        file_path = os.path.join(folder_path, doc)
+                        file_name = os.path.basename(file_path)
+                        with open(file_path, "rb") as file:
+                            await app.send_document(chat_id, file, caption=file_name)
                     except Exception as e:
                         print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
