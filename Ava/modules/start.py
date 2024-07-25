@@ -54,40 +54,34 @@ user_states = {}
 
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_PATHS:
-    folder_path = DOCUMENT_PATHS[category]
-    if os.path.exists(folder_path):
-        document_files = [
-            f for f in os.listdir(folder_path) 
-            if os.path.isfile(os.path.join(folder_path, f))
-        ]
-        if document_files:
-            await app.send_message(
-                chat_id,
-                f"These are the materials for the category: {category.replace('_', ' ').title()}"
-            )
-            for doc in document_files:
-                try:
-                    file_path = os.path.join(folder_path, doc)
-                    with open(file_path, "rb") as file:
-                        await app.send_document(
-                            chat_id, 
-                            file, 
-                            file_name=doc,
-                            caption=f"File: {doc}"
-                        )
-                except Exception as e:
-                    print(f"Failed to send document {doc}: {e}")
-                    await app.send_message(chat_id, "Failed to send some documents.")
+        folder_path = DOCUMENT_PATHS[category]
+        if os.path.exists(folder_path):
+            document_files = [
+                f for f in os.listdir(folder_path) 
+                if os.path.isfile(os.path.join(folder_path, f))
+            ]
+            if document_files:
+                await app.send_message(
+                    chat_id,
+                    f"These are the materials for the category: {category.replace('_', ' ').title()}"
+                )
+                for doc in document_files:
+                    try:
+                        file_path = os.path.join(folder_path, doc)
+                        with open(file_path, "rb") as file:
+                            await app.send_document(chat_id, file, file_name=doc, caption=file_name)
+                    except Exception as e:
+                        print(f"Failed to send document {doc}: {e}")
+                        await app.send_message(chat_id, "Failed to send some documents.")
+            else:
+                await app.send_message(chat_id, "No documents found in this category.")
         else:
-            await app.send_message(chat_id, "No documents found in this category.")
+            await app.send_message(chat_id, "Category folder not found.")
     else:
-        await app.send_message(chat_id, "Category folder not found.")
-else:
-    await app.send_message(chat_id, "Invalid category.")
-
-# Clear the user state after sending documents
-user_states[chat_id] = None
-
+        await app.send_message(chat_id, "Invalid category.")
+    
+    # Clear the user state after sending documents
+    user_states[chat_id] = None
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
