@@ -87,9 +87,9 @@ async def start(_, message):
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     callback_data = query.data
+    print(f"Received callback data: {callback_data}")
     new_text, new_markup = await get_new_text_and_markup(callback_data)
     
-    # Handle document sending
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         await send_documents(app, query.message.chat.id, category)
@@ -97,6 +97,7 @@ async def handle_callback(_, query: CallbackQuery):
     
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
+
 
 async def get_new_text_and_markup(callback_data):
     if callback_data.startswith("home_"):
