@@ -97,7 +97,7 @@ async def handle_callback(_, query: CallbackQuery):
     if callback_data.startswith("support_"):
         new_text = script.SUPPORT_TXT 
         new_markup = support_buttons
-    if callback_data.startswith("support_"):
+    if callback_data.startswith("force_"):
         new_text = script.FORCE_MSG 
         new_markup = force_buttons
     elif callback_data.startswith("modes_"):
