@@ -99,13 +99,13 @@ async def handle_callback(_, query: CallbackQuery):
         await query.message.edit_text(new_text, reply_markup=new_markup)
 
 async def get_new_text_and_markup(callback_data):
-    if callback_data.startswith("home_"):
+    if callback_data == "home_":
         return script.START_TXT, home_buttons
-    elif callback_data.startswith("support_"):
+    elif callback_data == "support_":
         return script.SUPPORT_TXT, support_buttons
-    elif callback_data.startswith("force_"):
+    elif callback_data == "force_":
         return script.FORCE_MSG, force_buttons
-    elif callback_data.startswith("modes_"):
+    elif callback_data == "modes_":
         return script.MODES_TXT, modes_buttons
     elif callback_data.startswith("notes_"):
         return "Choose a notes category.", notes_buttons
@@ -122,6 +122,7 @@ async def get_new_text_and_markup(callback_data):
     elif callback_data.startswith("supersix_"):
         return await get_supersix_buttons(callback_data)
     else:
+        print(f"Unrecognized callback data: {callback_data}")  # Debugging line
         return "Invalid selection. Please try again.", home_buttons
 
 # Additional functions for modules, premium materials, and Super Six
@@ -153,65 +154,5 @@ async def get_supersix_buttons(callback_data):
     elif callback_data == "super_six_rs_sir_":
         return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
     else:
-        return "Invalid selection. Please try again.", home_buttons
-
-# Super Six buttons definitions
-supersix_buttons = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("PRATEEK SIR", callback_data="super_six_prateek_sir_"),
-        InlineKeyboardButton("AKM SIR", callback_data="super_six_akm_sir_")
-    ],
-    [
-        InlineKeyboardButton("SKC SIR", callback_data="super_six_skc_sir_"),
-        InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir_")
-    ],
-    [
-        InlineKeyboardButton("Go Back ◀️", callback_data="modes_")
-    ]
-])
-
-supersix_buttons_prateek_sir = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("CLASS", callback_data="super_six_prateek_sir_class_"),
-        InlineKeyboardButton("PHYSICSALCOHOLICS POINTS", callback_data="super_six_prateek_sir_physicsalcoholics_points_")
-    ],
-    [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
-    ]
-])
-
-supersix_buttons_akm_sir = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("COURSE", callback_data="super_six_akm_sir_course_"),
-        InlineKeyboardButton("PYQ SERIES", callback_data="super_six_akm_sir_pyq_series_")
-    ],
-    [
-        InlineKeyboardButton("MODULE DISCUSSION", callback_data="super_six_akm_sir_module_discussion_")
-    ],
-    [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
-    ]
-])
-
-supersix_buttons_skc_sir = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("COURSE", callback_data="super_six_skc_sir_course_"),
-        InlineKeyboardButton("ORGANIC MECHANISM", callback_data="super_six_skc_sir_organic_mechanism_")
-    ],
-    [
-        InlineKeyboardButton("DPP", callback_data="super_six_skc_sir_dpp_")
-    ],
-    [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
-    ]
-])
-
-supersix_buttons_rs_sir = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("COURSE", callback_data="super_six_rs_sir_course_"),
-        InlineKeyboardButton("DPP", callback_data="super_six_rs_sir_dpp_")
-    ],
-    [
-        InlineKeyboardButton("Go Back ◀️", callback_data="supersix_")
-    ]
-])
+        print(f"Unrecognized Super Six callback data: {callback_data}")  # Debugging line
+        return "Invalid selection. Please try again.", supersix_buttons
