@@ -3,7 +3,7 @@ from pyrogram import filters
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from Ava import app
 from Ava.core import script
-from Ava.core.func import subscribe, chk_user
+
 
 # Define paths for each document category
 DOCUMENT_PATHS = {
