@@ -121,6 +121,8 @@ async def get_new_text_and_markup(callback_data):
         return "Choose a test series.", test_series_buttons
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
+     elif callback_data.startswith("supersix_"):
+        return await get_supersix_buttons(callback_data)    
     else:
         return "Invalid selection. Please try again.", home_buttons
 
@@ -139,3 +141,15 @@ async def get_premium_buttons(callback_data):
         return "Choose an AKANSHA MAM premium material.", premium_buttons_akansha_mam
     else:
         return "Choose a premium material.", premium_buttons
+
+async def get_supersix_buttons(callback_data):
+    if callback_data == "super_six_prateek_sir_":
+        return "Choose a PRATEEK SIR Super Six material.", supersix_buttons_prateek_sir
+    elif callback_data == "super_six_akm_sir_":
+        return "Choose an AKM SIR Super Six material.", supersix_buttons_akm_sir
+    elif callback_data == "super_six_skc_sir_":
+        return "Choose an SKC SIR Super Six material.", supersix_buttons_skc_sir
+    elif callback_data == "super_six_rs_sir_":
+        return "Choose an RS SIR Super Six material.", supersix_buttons_rs_sir
+    else:
+        return "Choose a Super Six category.", supersix_buttons
