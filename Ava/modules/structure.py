@@ -96,15 +96,15 @@ modes_buttons = InlineKeyboardMarkup([
 
 notes_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("SEEP MAM", callback_data="notes_seep_mam_"),
-        InlineKeyboardButton("AKANSHA MAM", callback_data="notes_akansha_mam_")
+        InlineKeyboardButton("sᴇᴇᴘ ᴍᴀᴍ", callback_data="notes_seep_mam_"),
+        InlineKeyboardButton("ᴀᴋᴀɴsʜᴀ ᴍᴀᴍ", callback_data="notes_akansha_mam_")
     ],
     [
-        InlineKeyboardButton("ANUPAM SIR", callback_data="notes_anupam_sir_"),
-        InlineKeyboardButton("SKC SIR", callback_data="notes_skc_sir_")
+        InlineKeyboardButton("ᴀɴᴜᴘᴀᴍ sɪʀ", callback_data="notes_anupam_sir_"),
+        InlineKeyboardButton("sᴋᴄ sɪʀ", callback_data="notes_skc_sir_")
     ],
     [
-        InlineKeyboardButton("HANDWRITTEN SHORT NOTES", callback_data="handwritten_notes_")
+        InlineKeyboardButton("ʜᴀɴᴅᴡʀɪᴛᴛᴇɴ ɴᴏᴛᴇs", callback_data="handwritten_notes_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -113,11 +113,11 @@ notes_buttons = InlineKeyboardMarkup([
 
 elps_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("PHYSICS", callback_data="elps_physics_"),
-        InlineKeyboardButton("CHEMISTRY", callback_data="elps_chemistry_")
+        InlineKeyboardButton("ᴘʜʏsɪᴄs", callback_data="elps_physics_"),
+        InlineKeyboardButton("ᴄʜᴇᴍɪsᴛʀʏ", callback_data="elps_chemistry_")
     ],
     [
-        InlineKeyboardButton("BIOLOGY", callback_data="elps_biology_")
+        InlineKeyboardButton("ʙɪᴏʟᴏɢʏ", callback_data="elps_biology_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -126,8 +126,8 @@ elps_buttons = InlineKeyboardMarkup([
 
 module_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("VERSION 3.1", callback_data="modules_3_1_"),
-        InlineKeyboardButton("VERSION 4.0", callback_data="modules_4_0_")
+        InlineKeyboardButton("ᴠᴇʀsɪᴏɴ 3.1", callback_data="modules_3_1_"),
+        InlineKeyboardButton("ᴠᴇʀsɪᴏɴ 4.0", callback_data="modules_4_0_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -136,11 +136,11 @@ module_buttons = InlineKeyboardMarkup([
 
 module_buttons_3_1 = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("PHYSICS", callback_data="modules_3_1_physics_"),
-        InlineKeyboardButton("CHEMISTRY", callback_data="modules_3_1_chemistry_")
+        InlineKeyboardButton("ᴘʜʏsɪᴄs", callback_data="modules_3_1_physics_"),
+        InlineKeyboardButton("ᴄʜᴇᴍɪsᴛʀʏ", callback_data="modules_3_1_chemistry_")
     ],
     [
-        InlineKeyboardButton("BIOLOGY", callback_data="modules_3_1_biology_")
+        InlineKeyboardButton("ʙɪᴏʟᴏɢʏ", callback_data="modules_3_1_biology_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modules_")
@@ -149,11 +149,11 @@ module_buttons_3_1 = InlineKeyboardMarkup([
 
 module_buttons_4_0 = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("PHYSICS", callback_data="modules_4_0_physics_"),
-        InlineKeyboardButton("CHEMISTRY", callback_data="modules_4_0_chemistry_")
+        InlineKeyboardButton("ᴘʜʏsɪᴄs", callback_data="modules_4_0_physics_"),
+        InlineKeyboardButton("ᴄʜᴇᴍɪsᴛʀʏ", callback_data="modules_4_0_chemistry_")
     ],
     [
-        InlineKeyboardButton("BIOLOGY", callback_data="modules_4_0_biology_")
+        InlineKeyboardButton("ʙɪᴏʟᴏɢʏ", callback_data="modules_4_0_biology_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modules_")
@@ -162,12 +162,12 @@ module_buttons_4_0 = InlineKeyboardMarkup([
 
 query_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("ASSERTION REASON", callback_data="modules_assertion_reason_"),
-        InlineKeyboardButton("QFT SERIES", callback_data="modules_qft_series_")
+        InlineKeyboardButton("ᴀssᴇʀᴛɪᴏɴ ʀᴇᴀsᴏɴ ", callback_data="modules_assertion_reason_"),
+        InlineKeyboardButton("ǫғᴛ sᴇʀɪᴇs", callback_data="modules_qft_series_")
     ],
     [
-        InlineKeyboardButton("MINDMAPS", callback_data="modules_mindmaps_"),
-        InlineKeyboardButton("Test Series", callback_data="test_series_")
+        InlineKeyboardButton("ᴍɪɴᴅᴍᴀᴘs", callback_data="modules_mindmaps_"),
+        InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", callback_data="test_series_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -176,8 +176,8 @@ query_buttons = InlineKeyboardMarkup([
 
 test_series_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("OFFLINE", callback_data="test_series_offline_"),
-        InlineKeyboardButton("PLUS/ICONIC", callback_data="test_series_plus_iconic_")
+        InlineKeyboardButton("ᴏғғʟɪɴᴇ", callback_data="test_series_offline_"),
+        InlineKeyboardButton("ᴘʟᴜs/ɪᴄᴏɴɪᴄ", callback_data="test_series_plus_iconic_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="query_buttons_")
@@ -186,12 +186,12 @@ test_series_buttons = InlineKeyboardMarkup([
 
 premium_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("SEEP MAM", callback_data="premium_material_seep_mam_"),
-        InlineKeyboardButton("AKANSHA MAM", callback_data="premium_material_akansha_mam_")
+        InlineKeyboardButton("sᴇᴇᴘ ᴍᴀᴍ", callback_data="premium_material_seep_mam_"),
+        InlineKeyboardButton("ᴀᴋᴀɴsʜᴀ ᴍᴀᴍ", callback_data="premium_material_akansha_mam_")
     ],
     [
-        InlineKeyboardButton("PRATEEK SIR", callback_data="premium_material_prateek_sir_"),
-        InlineKeyboardButton("AKM SIR", callback_data="premium_material_akm_sir_")
+        InlineKeyboardButton("ᴘʀᴀᴛᴇᴇᴋ sɪʀ", callback_data="premium_material_prateek_sir_"),
+        InlineKeyboardButton("ᴀᴋᴍ sɪʀ", callback_data="premium_material_akm_sir_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -200,12 +200,12 @@ premium_buttons = InlineKeyboardMarkup([
 
 premium_buttons_seep_mam = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("NPP", callback_data="premium_material_seep_mam_npp_"),
-        InlineKeyboardButton("DPP", callback_data="premium_material_seep_mam_dpp_")
+        InlineKeyboardButton("ɴᴘᴘ", callback_data="premium_material_seep_mam_npp_"),
+        InlineKeyboardButton("ᴅᴘᴘ", callback_data="premium_material_seep_mam_dpp_")
     ],
     [
-        InlineKeyboardButton("FORMULA BOOKLET", callback_data="premium_material_seep_mam_formula_booklet_"),
-        InlineKeyboardButton("IMPORTANT BOOKLETS", callback_data="premium_material_seep_mam_important_booklets_")
+        InlineKeyboardButton("ғᴏʀᴍᴜʟᴀ ʙᴏᴏᴋʟᴇᴛ", callback_data="premium_material_seep_mam_formula_booklet_"),
+        InlineKeyboardButton("ɪᴍᴘᴏʀᴛᴀɴᴛ ʙᴏᴏᴋʟᴇᴛ", callback_data="premium_material_seep_mam_important_booklets_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="premium_buttons_")
@@ -214,8 +214,8 @@ premium_buttons_seep_mam = InlineKeyboardMarkup([
 
 premium_buttons_akansha_mam = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("DPP", callback_data="premium_material_akansha_mam_dpp_"),
-        InlineKeyboardButton("MINDMAPS", callback_data="premium_material_akansha_mam_mindmaps_")
+        InlineKeyboardButton("ᴅᴘᴘ", callback_data="premium_material_akansha_mam_dpp_"),
+        InlineKeyboardButton("ᴍɪɴᴅᴍᴀᴘs", callback_data="premium_material_akansha_mam_mindmaps_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="premium_buttons_")
@@ -236,12 +236,12 @@ premium_buttons_akm_sir = InlineKeyboardMarkup([
 
 supersix_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("PRATEEK SIR", callback_data="super_six_prateek_sir_"),
-        InlineKeyboardButton("AKM SIR", callback_data="super_six_akm_sir_")
+        InlineKeyboardButton("ᴘʀᴀᴛᴇᴇᴋ sɪʀ", callback_data="super_six_prateek_sir_"),
+        InlineKeyboardButton("ᴀᴋᴍ sɪʀ", callback_data="super_six_akm_sir_")
     ],
     [
-        InlineKeyboardButton("SKC SIR", callback_data="super_six_skc_sir_"),
-        InlineKeyboardButton("RS SIR", callback_data="super_six_rs_sir_")
+        InlineKeyboardButton("sᴋᴄ sɪʀ", callback_data="super_six_skc_sir_"),
+        InlineKeyboardButton("ʀs sɪʀ", callback_data="super_six_rs_sir_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
@@ -250,8 +250,8 @@ supersix_buttons = InlineKeyboardMarkup([
 
 supersix_buttons_prateek_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("CLASS", callback_data="super_six_prateek_sir_class_"),
-        InlineKeyboardButton("PHYSICSALCOHOLICS POINTS", callback_data="super_six_prateek_sir_physicsalcoholics_points_")
+        InlineKeyboardButton("ᴄᴏᴜʀsᴇ", callback_data="super_six_prateek_sir_class_"),
+        InlineKeyboardButton("ᴘʜʏsɪᴄs ᴀʟᴄᴏʜᴏʟɪᴄ ᴘᴏɪɴᴛs", callback_data="super_six_prateek_sir_physicsalcoholics_points_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="supersix_")
@@ -260,11 +260,11 @@ supersix_buttons_prateek_sir = InlineKeyboardMarkup([
 
 supersix_buttons_akm_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_akm_sir_course_"),
-        InlineKeyboardButton("PYQ SERIES", callback_data="super_six_akm_sir_pyq_series_")
+        InlineKeyboardButton("ᴄᴏᴜʀsᴇ", callback_data="super_six_akm_sir_course_"),
+        InlineKeyboardButton(" ᴘʏǫ sᴇʀɪᴇs", callback_data="super_six_akm_sir_pyq_series_")
     ],
     [
-        InlineKeyboardButton("MODULE DISCUSSION", callback_data="super_six_akm_sir_module_discussion_")
+        InlineKeyboardButton("ᴍᴏᴅᴜʟᴇs ᴅɪssᴄᴜssɪᴏɴ", callback_data="super_six_akm_sir_module_discussion_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="supersix_")
@@ -273,11 +273,11 @@ supersix_buttons_akm_sir = InlineKeyboardMarkup([
 
 supersix_buttons_skc_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_skc_sir_course_"),
-        InlineKeyboardButton("ORGANIC MECHANISM", callback_data="super_six_skc_sir_organic_mechanism_")
+        InlineKeyboardButton("ᴄᴏᴜʀsᴇ", callback_data="super_six_skc_sir_course_"),
+        InlineKeyboardButton("ᴏʀɢᴀɴɪᴄ ᴍᴇᴄʜᴀɴɪsᴍ", callback_data="super_six_skc_sir_organic_mechanism_")
     ],
     [
-        InlineKeyboardButton("DPP", callback_data="super_six_skc_sir_dpp_")
+        InlineKeyboardButton("ᴅᴘᴘ", callback_data="super_six_skc_sir_dpp_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="supersix_")
@@ -286,8 +286,8 @@ supersix_buttons_skc_sir = InlineKeyboardMarkup([
 
 supersix_buttons_rs_sir = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("COURSE", callback_data="super_six_rs_sir_course_"),
-        InlineKeyboardButton("DPP", callback_data="super_six_rs_sir_dpp_")
+        InlineKeyboardButton("ᴄᴏᴜʀsᴇ", callback_data="super_six_rs_sir_course_"),
+        InlineKeyboardButton("ᴅᴘᴘ", callback_data="super_six_rs_sir_dpp_")
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="supersix_")
