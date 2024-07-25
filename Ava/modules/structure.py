@@ -53,14 +53,13 @@ home_buttons = InlineKeyboardMarkup([
 ])
 
 
-# Button Definitions
 support_buttons = InlineKeyboardMarkup([
     [
         InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ", url="https://t.me/JARVIS_V_SUPPORT"),
         InlineKeyboardButton("ᴅᴇᴠᴇʟᴏᴘᴇʀ", url="https://t.me/JARVIS_V2")
     ],
     [
-        InlineKeyboardButton("Verify ✅", callback_data="home_")
+        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
     ]
 ])
 
@@ -68,7 +67,7 @@ support_buttons = InlineKeyboardMarkup([
 force_buttons = InlineKeyboardMarkup([
     [
         InlineKeyboardButton("ᴊᴏɪɴ", url="https://t.me/JARVIS_V_SUPPORT"),
-        InlineKeyboardButton("Go Back ◀️", callback_data="home_")
+        InlineKeyboardButton("Verify ✅", callback_data="home_")
     ],
 ])
 
