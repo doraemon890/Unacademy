@@ -145,7 +145,7 @@ async def handle_callback(_, query: CallbackQuery):
             # User hasn’t joined the channel, prompt to join
             await query.message.edit_text(
                 "It seems you haven't joined the channel yet. Please click the 'Join the Channel' button, then press 'Verify Membership' to confirm your membership.",
-                reply_markup=verification_buttons
+                reply_markup=force_buttons 
             )
     elif callback_data.startswith("modes_"):
         member_status = await check_channel_membership(app, query.from_user.id)
@@ -157,7 +157,7 @@ async def handle_callback(_, query: CallbackQuery):
             # Prompt the user to join the channel
             await query.message.edit_text(
                 "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
-                reply_markup=verification_buttons
+                reply_markup=force_buttons 
             )
         return
 
