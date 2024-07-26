@@ -5,6 +5,7 @@ from Ava.core.Documents import *
 DOCUMENT_PATHS = {
     "books": "Ava/core/Documents/books/",
     "notes_akansha_mam": "Ava/core/Documents/notes_akansha_mam/",
+    "notes_seep_mam" : "Ava/core/Documents/notes_seep_mam/",
     "notes_anupam_sir": "Ava/core/Documents/notes_anupam_sir/",
     "notes_skc_sir": "Ava/core/Documents/notes_skc_sir/",
     "handwritten_notes": "Ava/core/Documents/handwritten_notes/",
