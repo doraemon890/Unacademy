@@ -78,7 +78,7 @@ async def send_documents(app, chat_id, category):
                             if message_id is None:
                                 message_id = getattr(sent_message, 'id', None)  # Alternative attribute
                             if message_id:
-                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 240))
+                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 20))
                             else:
                                 print(f"Failed to get message_id for document: {doc}")
                     except Exception as e:
