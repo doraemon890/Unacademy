@@ -177,12 +177,6 @@ async def get_module_buttons(callback_data):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 3.1 ᴍᴏᴅᴜʟᴇ.", module_buttons_3_1
     elif callback_data == "modules_4_0_":
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 4.0 ᴍᴏᴅᴜʟᴇ.", module_buttons_4_0
-    elif callback_data == "modules_mindmaps_":
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍɪɴᴅᴍᴀᴘ.", module_buttons_mindmaps
-    elif callback_data == "modules_assertion_reason_":
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍᴏᴅᴜʟᴇ ᴡɪᴛʜ ᴀssᴇʀᴛɪᴏɴ ᴀɴᴅ ʀᴇᴀsᴏɴ.", module_buttons_assertion_reason
-    elif callback_data == "modules_qft_series_":
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ǫғᴛ sᴇʀɪᴇs ᴍᴏᴅᴜʟᴇ.", module_buttons_qft_series
     else:
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍᴏᴅᴜʟᴇ ᴄᴀᴛᴇɢᴏʀʏ.", module_buttons
 
