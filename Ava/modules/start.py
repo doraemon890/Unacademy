@@ -64,7 +64,7 @@ async def send_documents(app, chat_id, category):
             if document_files:
                 await app.send_message(
                     chat_id,
-                    f"ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}"
+                    f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}`"
                 )
                 for doc in document_files:
                     try:
