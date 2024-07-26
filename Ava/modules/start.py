@@ -2,6 +2,7 @@ import os
 import asyncio
 import random
 from pyrogram import Client, filters
+from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
 from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
