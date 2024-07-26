@@ -157,10 +157,8 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴇʟᴘs ᴄᴀᴛᴇɢᴏʀʏ.", elps_buttons
     elif callback_data.startswith("modules_"):
         return await get_module_buttons(callback_data)
-    elif callback_data.startswith("query_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs ᴄᴀᴛᴇɢᴏʀʏ.", query_buttons
     elif callback_data.startswith("test_series_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs.", test_series_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs ᴄᴀᴛᴇɢᴏʀʏ.", test_series_buttons
     elif callback_data.startswith("supersix_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴜᴘᴇʀ sɪx ᴄᴀᴛᴇɢᴏʀʏ.", supersix_buttons
     elif callback_data.startswith("super_six_prateek_sir_"):
@@ -179,6 +177,12 @@ async def get_module_buttons(callback_data):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 3.1 ᴍᴏᴅᴜʟᴇ.", module_buttons_3_1
     elif callback_data == "modules_4_0_":
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴠᴇʀsɪᴏɴ 4.0 ᴍᴏᴅᴜʟᴇ.", module_buttons_4_0
+    elif callback_data == "modules_mindmaps_":
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍɪɴᴅᴍᴀᴘ.", module_buttons_mindmaps
+    elif callback_data == "modules_assertion_reason_":
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍᴏᴅᴜʟᴇ ᴡɪᴛʜ ᴀssᴇʀᴛɪᴏɴ ᴀɴᴅ ʀᴇᴀsᴏɴ.", module_buttons_assertion_reason
+    elif callback_data == "modules_qft_series_":
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ǫғᴛ sᴇʀɪᴇs ᴍᴏᴅᴜʟᴇ.", module_buttons_qft_series
     else:
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴍᴏᴅᴜʟᴇ ᴄᴀᴛᴇɢᴏʀʏ.", module_buttons
 
