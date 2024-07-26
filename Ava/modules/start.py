@@ -147,7 +147,18 @@ async def start(_, message):
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
-    
+
+    if callback_data == "verify_":
+        member_status = await check_channel_membership(app, query.from_user.id)
+        if member_status == "member":
+            await query.message.edit_text("✅ You are now verified as a member!")
+        else:
+            await query.message.edit_text(
+                "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
+                reply_markup=force_buttons
+            )
+        return
+
     member_status = await check_channel_membership(app, query.from_user.id)
     if member_status == "not_member":
         await query.message.edit_text(
@@ -157,10 +168,11 @@ async def handle_callback(_, query: CallbackQuery):
         return
 
     new_text, new_markup = await get_new_text_and_markup(query, callback_data)
-    
+
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         if user_states.get(chat_id):
+            # Send the warning message and schedule it for deletion
             warning_message = await app.send_message(
                 chat_id,
                 "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
@@ -185,6 +197,7 @@ async def handle_callback(_, query: CallbackQuery):
 
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
+
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
