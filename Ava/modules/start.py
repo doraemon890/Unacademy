@@ -69,10 +69,18 @@ async def send_documents(app, chat_id, category):
                     try:
                         file_path = os.path.join(folder_path, doc)
                         with open(file_path, "rb") as file:
-                            await app.send_document(chat_id, file, file_name=doc, caption=doc)
+                            sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
+                            # Schedule the document for deletion after 240 seconds
+                            asyncio.create_task(delete_message_after_delay(app, chat_id, sent_message.message_id, 240))
                     except Exception as e:
                         print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
+                
+                # Send the notification message
+                await app.send_message(
+                    chat_id,
+                    "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 4 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+                )
             else:
                 await app.send_message(chat_id, "No documents found in this category.")
         else:
@@ -82,6 +90,13 @@ async def send_documents(app, chat_id, category):
     
     # Clear the user state after sending documents
     user_states[chat_id] = None
+
+async def delete_message_after_delay(app, chat_id, message_id, delay):
+    await asyncio.sleep(delay)
+    try:
+        await app.delete_messages(chat_id, message_id)
+    except Exception as e:
+        print(f"Failed to delete message {message_id}: {e}")
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
