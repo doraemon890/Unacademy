@@ -71,9 +71,14 @@ async def send_documents(app, chat_id, category):
                         file_path = os.path.join(folder_path, doc)
                         with open(file_path, "rb") as file:
                             sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
-                            # Schedule the document for deletion after 240 seconds
-                            if sent_message and sent_message.message_id:
-                                asyncio.create_task(delete_message_after_delay(app, chat_id, sent_message.message_id, 240))
+                            # Debug output to check the attributes of sent_message
+                            print(f"Sent message attributes: {dir(sent_message)}")
+                            if sent_message:
+                                message_id = getattr(sent_message, 'message_id', None)
+                                if message_id:
+                                    asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 240))
+                                else:
+                                    print(f"Failed to get message_id for document: {doc}")
                     except Exception as e:
                         print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
