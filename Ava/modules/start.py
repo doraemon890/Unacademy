@@ -116,7 +116,7 @@ async def handle_callback(_, query: CallbackQuery):
 
 async def get_new_text_and_markup(callback_data):
     if callback_data.startswith("home_"):
-        return START_TXT.format(query.from_user.mention), home_buttons
+        return script.START_TXT.format(query.from_user.mention), home_buttons
     elif callback_data.startswith("support_"):
         return script.SUPPORT_TXT, support_buttons
     elif callback_data.startswith("force_"):
