@@ -83,10 +83,10 @@ modes_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("ᴇʟᴘs", callback_data="elps_")
     ],
     [
-        InlineKeyboardButton("ǫᴜᴇʀɪᴇs", callback_data="query_")
+        InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", callback_data="query_")
     ],
     [
-        InlineKeyboardButton("sᴜᴘᴇʀ sɪx ", callback_data="supersix_"),
+        InlineKeyboardButton("sᴜᴘᴇʀ sɪx", callback_data="supersix_"),
         InlineKeyboardButton("ᴘʀᴇᴍɪᴜᴍ ᴍᴀᴛᴇʀɪᴀʟs", callback_data="premium_")
     ],
     [
@@ -96,11 +96,11 @@ modes_buttons = InlineKeyboardMarkup([
 
 notes_buttons = InlineKeyboardMarkup([
     [
-        InlineKeyboardButton("sᴇᴇᴘ ᴍᴀᴍ", callback_data="notes_seep_mam_"),
+        InlineKeyboardButton("ᴀɴᴜᴘᴀᴍ sɪʀ", callback_data="notes_anupam_sir_"),
         InlineKeyboardButton("ᴀᴋᴀɴsʜᴀ ᴍᴀᴍ", callback_data="notes_akansha_mam_")
     ],
     [
-        InlineKeyboardButton("ᴀɴᴜᴘᴀᴍ sɪʀ", callback_data="notes_anupam_sir_"),
+        InlineKeyboardButton("sᴇᴇᴘ ᴍᴀᴍ", callback_data="notes_seep_mam_"),
         InlineKeyboardButton("sᴋᴄ sɪʀ", callback_data="notes_skc_sir_")
     ],
     [
