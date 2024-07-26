@@ -21,7 +21,7 @@ app = Client(
 )
 
 async def info_bot():
-    global BOT_ID, BOT_NAME, BOT_USERNAME
+    global BOT_ID, BOT_NAME
     
     # Start the client
     await app.start()
@@ -29,7 +29,6 @@ async def info_bot():
     # Retrieve bot information
     getme = await app.get_me()
     BOT_ID = getme.id
-    BOT_USERNAME = getme.username
     BOT_NAME = f"{getme.first_name} {getme.last_name}" if getme.last_name else getme.first_name
 
 # Run the info_bot function until complete
