@@ -148,7 +148,7 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     elif callback_data.startswith("support_"):
         return script.SUPPORT_TXT, support_buttons
     elif callback_data.startswith("force_"):
-        return script.FORCE_MSG, force_buttons
+        return script.FORCE_MSG.format(query.from_user.mention), force_buttons
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
     elif callback_data.startswith("notes_"):
