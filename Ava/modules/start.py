@@ -2,7 +2,6 @@ import os
 import asyncio
 import random
 from pyrogram import Client, filters
-from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
 from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
@@ -53,18 +52,6 @@ CATEGORY_MAPPING = {
 
 # Dictionary to keep track of user states
 user_states = {}
-
-CHANNEL_USERNAME = "JARVIS_V_SUPPORT"
-
-async def check_channel_membership(app, user_id):
-    try:
-        participant = await app.get_chat_member(chat_id=CHANNEL_USERNAME, user_id=user_id)
-        return "member" if participant.status in ["member", "administrator", "creator"] else "not_member"
-    except UserNotParticipant:
-        return "not_member"
-    except Exception as e:
-        print(f"Error checking channel membership: {e}")
-        return "not_member"
 
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_PATHS:
@@ -148,26 +135,6 @@ async def start(_, message):
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
-
-    if callback_data == "verify_":
-        member_status = await check_channel_membership(app, query.from_user.id)
-        if member_status == "member":
-            await query.message.edit_text("✅ You are now verified as a member!")
-        else:
-            await query.message.edit_text(
-                "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
-                reply_markup=force_buttons
-            )
-        return
-
-    member_status = await check_channel_membership(app, query.from_user.id)
-    if member_status == "not_member":
-        await query.message.edit_text(
-            "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
-            reply_markup=force_buttons
-        )
-        return
-
     new_text, new_markup = await get_new_text_and_markup(query, callback_data)
 
     category = CATEGORY_MAPPING.get(callback_data)
@@ -180,20 +147,9 @@ async def handle_callback(_, query: CallbackQuery):
             )
             asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.message_id, 5))
             return
-        
+
         user_states[chat_id] = category
         await send_documents(app, chat_id, category)
-        return
-
-    if callback_data.startswith("modes_"):
-        if member_status == "member":
-            user_states[chat_id] = callback_data
-            await send_documents(app, chat_id, callback_data)
-        else:
-            await query.message.edit_text(
-                "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
-                reply_markup=force_buttons
-            )
         return
 
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
