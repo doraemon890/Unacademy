@@ -158,7 +158,7 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     elif callback_data.startswith("modules_"):
         return await get_module_buttons(callback_data)
     elif callback_data.startswith("query_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ǫᴜᴇʀʏ ᴄᴀᴛᴇɢᴏʀʏ.", query_buttons
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs ᴄᴀᴛᴇɢᴏʀʏ.", query_buttons
     elif callback_data.startswith("test_series_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴛᴇsᴛ sᴇʀɪᴇs.", test_series_buttons
     elif callback_data.startswith("supersix_"):
