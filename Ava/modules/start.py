@@ -131,21 +131,19 @@ async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
     
-    # Check if the user has joined the channel
     if callback_data.startswith("modes_"):
         member_status = await check_channel_membership(app, query.from_user.id)
         if member_status == "member":
             # User has joined the channel, proceed to show modules
             user_states[chat_id] = callback_data
             await send_documents(app, chat_id, callback_data)
-            return
         else:
             # User hasn't joined the channel, show verification message
             await query.message.edit_text(
                 "Please join our channel to access the Unacademy modules.",
                 reply_markup=force_buttons
             )
-            return
+        return
     
     # Handle other callback types
     new_text, new_markup = await get_new_text_and_markup(query, callback_data)
