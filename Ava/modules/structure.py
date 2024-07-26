@@ -84,7 +84,7 @@ modes_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("ᴇʟᴘs", callback_data="elps_")
     ],
     [
-        InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", callback_data="query_")
+        InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", callback_data="test_series_")
     ],
     [
         InlineKeyboardButton("sᴜᴘᴇʀ sɪx", callback_data="supersix_"),
@@ -131,6 +131,13 @@ module_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("ᴠᴇʀsɪᴏɴ 4.0", callback_data="modules_4_0_")
     ],
     [
+        InlineKeyboardButton("ᴍɪɴᴅᴍᴀᴘs", callback_data="modules_mindmaps_")
+    ],
+    [
+        InlineKeyboardButton("ᴀssᴇʀᴛɪᴏɴ ʀᴇᴀsᴏɴ", callback_data="modules_assertion_reason_"),
+        InlineKeyboardButton("ǫғᴛ sᴇʀɪᴇs", callback_data="modules_qft_series_")
+    ],
+    [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
     ]
 ])
@@ -158,20 +165,6 @@ module_buttons_4_0 = InlineKeyboardMarkup([
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modules_")
-    ]
-])
-
-query_buttons = InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("ᴀssᴇʀᴛɪᴏɴ ʀᴇᴀsᴏɴ ", callback_data="modules_assertion_reason_"),
-        InlineKeyboardButton("ǫғᴛ sᴇʀɪᴇs", callback_data="modules_qft_series_")
-    ],
-    [
-        InlineKeyboardButton("ᴍɪɴᴅᴍᴀᴘs", callback_data="modules_mindmaps_"),
-        InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", callback_data="test_series_")
-    ],
-    [
-        InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
     ]
 ])
 
