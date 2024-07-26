@@ -52,7 +52,7 @@ CATEGORY_MAPPING = {
 
 
 # Define your channel username
-CHANNEL_USERNAME = "@JARVIS_V_SUPPORT"
+CHANNEL_USERNAME = "JARVIS_V_SUPPORT"
 
 
 # Dictionary to keep track of user states
