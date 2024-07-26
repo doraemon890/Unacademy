@@ -7,5 +7,6 @@ requests
 hachoir
 cloudscraper
 pycryptodome
+python-dotenv
 pytz
 pyromod
