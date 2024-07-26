@@ -50,6 +50,11 @@ CATEGORY_MAPPING = {
     "super_six_rs_sir_dpp_": "super_six_rs_sir_dpp",
 }
 
+
+# Define your channel username
+CHANNEL_USERNAME = "@JARVIS_V_SUPPORT"
+
+
 # Dictionary to keep track of user states
 user_states = {}
 
@@ -125,22 +130,35 @@ async def start(_, message):
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
-    new_text, new_markup = await get_new_text_and_markup(query, callback_data)
     
-    # Handle category requests
-    category = CATEGORY_MAPPING.get(callback_data)
-    if category:
-        if user_states.get(chat_id):
-            await app.send_message(chat_id, "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ.")
+    # Check if the user has joined the channel
+    if callback_data.startswith("modes_"):
+        member_status = await check_channel_membership(app, query.from_user.id)
+        if member_status == "member":
+            # User has joined the channel, proceed to show modules
+            user_states[chat_id] = callback_data
+            await send_documents(app, chat_id, callback_data)
             return
-        
-        user_states[chat_id] = category
-        await send_documents(app, chat_id, category)
-        return
-
+        else:
+            # User hasn't joined the channel, show verification message
+            await query.message.edit_text(
+                "Please join our channel to access the Unacademy modules.",
+                reply_markup=force_buttons
+            )
+            return
+    
     # Handle other callback types
+    new_text, new_markup = await get_new_text_and_markup(query, callback_data)
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
+
+async def check_channel_membership(app, user_id):
+    try:
+        chat_member = await app.get_chat_member(CHANNEL_USERNAME, user_id)
+        return chat_member.status
+    except Exception as e:
+        print(f"Error checking channel membership: {e}")
+        return "left"
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
