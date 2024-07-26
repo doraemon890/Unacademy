@@ -126,6 +126,20 @@ async def start(_, message):
         reply_markup=home_buttons
     )
 
+async def check_channel_membership(app, user_id):
+    try:
+        # Attempt to get user status in the channel
+        participant = await app.get_chat_member(chat_id="your_channel_username", user_id=user_id)
+        if participant.status in ["member", "administrator", "creator"]:
+            return "member"
+        else:
+            return "not_member"
+    except Exception as e:
+        # Print the error for debugging
+        print(f"Error checking channel membership: {e}")
+        # Return "not_member" if there is an issue
+        return "not_member"
+
 @app.on_callback_query()
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
@@ -134,15 +148,12 @@ async def handle_callback(_, query: CallbackQuery):
     if callback_data == "verify_membership":
         member_status = await check_channel_membership(app, query.from_user.id)
         if member_status == "member":
-            # Membership verified, return to home screen
             await query.message.edit_text(
                 "Thank you for joining the channel! You can now access the Unacademy modules.",
                 reply_markup=home_buttons
             )
-            # Optionally, update user state if needed
             user_states[chat_id] = None
         else:
-            # User hasn’t joined the channel, prompt to join
             await query.message.edit_text(
                 "It seems you haven't joined the channel yet. Please click the 'Join the Channel' button, then press 'Verify Membership' to confirm your membership.",
                 reply_markup=force_buttons 
@@ -150,33 +161,19 @@ async def handle_callback(_, query: CallbackQuery):
     elif callback_data.startswith("modes_"):
         member_status = await check_channel_membership(app, query.from_user.id)
         if member_status == "member":
-            # Proceed with showing modules
             user_states[chat_id] = callback_data
             await send_documents(app, chat_id, callback_data)
         else:
-            # Prompt the user to join the channel
             await query.message.edit_text(
                 "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
                 reply_markup=force_buttons 
             )
         return
 
-    # Handle other callback types
     new_text, new_markup = await get_new_text_and_markup(query, callback_data)
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
 
-
-async def check_channel_membership(app, user_id):
-    try:
-        # Check the user's membership status
-        chat_member = await app.get_chat_member(CHANNEL_USERNAME, user_id)
-        return chat_member.status
-    except Exception as e:
-        # Handle the case where the bot cannot check membership
-        print(f"Error checking channel membership: {e}")
-        # Notify the user to join the channel
-        return "left"
 
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
