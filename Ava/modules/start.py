@@ -1,7 +1,7 @@
 import os
 import asyncio
 import random
-from pyrogram import filters
+from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
 from Ava import app
 from Ava.core import script
@@ -53,20 +53,31 @@ CATEGORY_MAPPING = {
 # Dictionary to keep track of user states
 user_states = {}
 
+CHANNEL_USERNAME = "JARVIS_V_SUPPORT"
+
+async def check_channel_membership(app, user_id):
+    try:
+        participant = await app.get_chat_member(chat_id=CHANNEL_USERNAME, user_id=user_id)
+        return "member" if participant.status in ["member", "administrator", "creator"] else "not_member"
+    except UserNotParticipant:
+        return "not_member"
+    except Exception as e:
+        print(f"Error checking channel membership: {e}")
+        return "not_member"
+
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_PATHS:
         folder_path = DOCUMENT_PATHS[category]
         if os.path.exists(folder_path):
             document_files = [
-                f for f in os.listdir(folder_path) 
+                f for f in os.listdir(folder_path)
                 if os.path.isfile(os.path.join(folder_path, f))
             ]
             if document_files:
                 category_message = await app.send_message(
                     chat_id,
-                    f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}`"
+                    f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {CATEGORY_MAPPING.get(category, category).title()}`"
                 )
-                # Use the "id" attribute to get the message ID for deletion
                 category_message_id = getattr(category_message, 'id', None)
                 if category_message_id:
                     asyncio.create_task(delete_message_after_delay(app, chat_id, category_message_id, 120))
@@ -78,7 +89,6 @@ async def send_documents(app, chat_id, category):
                         file_path = os.path.join(folder_path, doc)
                         with open(file_path, "rb") as file:
                             sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
-                            # Use the "id" attribute to get the message ID
                             message_id = getattr(sent_message, 'id', None)
                             if message_id:
                                 asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
@@ -88,11 +98,18 @@ async def send_documents(app, chat_id, category):
                         print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
                 
-                # Send the notification message
-                await app.send_message(
+                # Send initial message
+                initial_message = await app.send_message(
                     chat_id,
                     "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
                 )
+                
+                initial_message_id = getattr(initial_message, 'id', None)
+                if initial_message_id:
+                    # Edit message after 120 seconds
+                    asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
+                else:
+                    print("Failed to get message_id for the initial message.")
             else:
                 await app.send_message(chat_id, "No documents found in this category.")
         else:
@@ -100,9 +117,14 @@ async def send_documents(app, chat_id, category):
     else:
         await app.send_message(chat_id, "Invalid category.")
     
-    # Clear the user state after sending documents
     user_states[chat_id] = None
 
+async def edit_message_after_delay(app, chat_id, message_id, delay):
+    await asyncio.sleep(delay)
+    try:
+        await app.edit_message_text(chat_id, message_id, "__The message has been deleted to avoid copyrights__")
+    except Exception as e:
+        print(f"Failed to edit message {message_id}: {e}")
 
 async def delete_message_after_delay(app, chat_id, message_id, delay):
     await asyncio.sleep(delay)
@@ -125,20 +147,42 @@ async def start(_, message):
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
+    
+    member_status = await check_channel_membership(app, query.from_user.id)
+    if member_status == "not_member":
+        await query.message.edit_text(
+            "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
+            reply_markup=force_buttons
+        )
+        return
+
     new_text, new_markup = await get_new_text_and_markup(query, callback_data)
     
-    # Handle category requests
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         if user_states.get(chat_id):
-            await app.send_message(chat_id, "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ.")
+            warning_message = await app.send_message(
+                chat_id,
+                "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
+            )
+            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.message_id, 5))
             return
         
         user_states[chat_id] = category
         await send_documents(app, chat_id, category)
         return
 
-    # Handle other callback types
+    if callback_data.startswith("modes_"):
+        if member_status == "member":
+            user_states[chat_id] = callback_data
+            await send_documents(app, chat_id, callback_data)
+        else:
+            await query.message.edit_text(
+                "It looks like you haven't joined our channel yet. Please join using the button below, then try again.",
+                reply_markup=force_buttons
+            )
+        return
+
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
 
