@@ -62,23 +62,26 @@ async def send_documents(app, chat_id, category):
                 if os.path.isfile(os.path.join(folder_path, f))
             ]
             if document_files:
-                await app.send_message(
+                category_message = await app.send_message(
                     chat_id,
                     f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}`"
                 )
+                # Use the "id" attribute to get the message ID for deletion
+                category_message_id = getattr(category_message, 'id', None)
+                if category_message_id:
+                    asyncio.create_task(delete_message_after_delay(app, chat_id, category_message_id, 120))
+                else:
+                    print(f"Failed to get message_id for category message: {category}")
+
                 for doc in document_files:
                     try:
                         file_path = os.path.join(folder_path, doc)
                         with open(file_path, "rb") as file:
                             sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
-                            # Log the entire response object to understand its structure
-                            print(f"Sent message response: {sent_message}")
-                            # Attempt to retrieve message_id from common attributes
-                            message_id = getattr(sent_message, 'message_id', None)
-                            if message_id is None:
-                                message_id = getattr(sent_message, 'id', None)  # Alternative attribute
+                            # Use the "id" attribute to get the message ID
+                            message_id = getattr(sent_message, 'id', None)
                             if message_id:
-                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 20))
+                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
                             else:
                                 print(f"Failed to get message_id for document: {doc}")
                     except Exception as e:
@@ -88,7 +91,7 @@ async def send_documents(app, chat_id, category):
                 # Send the notification message
                 await app.send_message(
                     chat_id,
-                    "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 4 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+                    "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
                 )
             else:
                 await app.send_message(chat_id, "No documents found in this category.")
@@ -99,6 +102,7 @@ async def send_documents(app, chat_id, category):
     
     # Clear the user state after sending documents
     user_states[chat_id] = None
+
 
 async def delete_message_after_delay(app, chat_id, message_id, delay):
     await asyncio.sleep(delay)
