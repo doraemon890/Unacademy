@@ -174,7 +174,7 @@ test_series_buttons = InlineKeyboardMarkup([
         InlineKeyboardButton("ᴘʟᴜs/ɪᴄᴏɴɪᴄ", callback_data="test_series_plus_iconic_")
     ],
     [
-        InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="query_buttons_")
+        InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
     ]
 ])
 
