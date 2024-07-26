@@ -97,7 +97,7 @@ async def start(_, message):
 async def handle_callback(_, query: CallbackQuery):
     chat_id = query.message.chat.id
     callback_data = query.data
-    new_text, new_markup = await get_new_text_and_markup(callback_data)
+    new_text, new_markup = await get_new_text_and_markup(query, callback_data)
     
     # Handle category requests
     category = CATEGORY_MAPPING.get(callback_data)
@@ -114,7 +114,7 @@ async def handle_callback(_, query: CallbackQuery):
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
 
-async def get_new_text_and_markup(callback_data):
+async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
         return script.START_TXT.format(query.from_user.mention), home_buttons
     elif callback_data.startswith("support_"):
@@ -147,6 +147,7 @@ async def get_new_text_and_markup(callback_data):
         return await get_premium_buttons(callback_data)
     else:
         return "ɪɴᴠᴀʟɪᴅ sᴇʟᴇᴄᴛɪᴏɴ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ.📛", home_buttons
+
 
 async def get_module_buttons(callback_data):
     if callback_data == "modules_3_1_":
