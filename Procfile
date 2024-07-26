@@ -1,1 +1,1 @@
-worker: python -m Ava
+worker: python -m bash start
