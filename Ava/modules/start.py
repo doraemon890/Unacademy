@@ -72,7 +72,8 @@ async def send_documents(app, chat_id, category):
                         with open(file_path, "rb") as file:
                             sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
                             # Schedule the document for deletion after 240 seconds
-                            asyncio.create_task(delete_message_after_delay(app, chat_id, sent_message.message_id, 240))
+                            if sent_message and sent_message.message_id:
+                                asyncio.create_task(delete_message_after_delay(app, chat_id, sent_message.message_id, 240))
                     except Exception as e:
                         print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
@@ -163,7 +164,6 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return await get_premium_buttons(callback_data)
     else:
         return "ɪɴᴠᴀʟɪᴅ sᴇʟᴇᴄᴛɪᴏɴ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ.📛", home_buttons
-
 
 async def get_module_buttons(callback_data):
     if callback_data == "modules_3_1_":
