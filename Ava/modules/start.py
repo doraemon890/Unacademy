@@ -181,6 +181,8 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_akm_sir
     elif callback_data.startswith("super_six_skc_sir_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_skc_sir
+    elif callback_data.startswith("super_six_rs_sir_"):
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_rs_sir
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
     else:
