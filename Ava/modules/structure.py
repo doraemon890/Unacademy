@@ -69,7 +69,7 @@ support_buttons = InlineKeyboardMarkup([
 force_buttons = InlineKeyboardMarkup([
     [
         InlineKeyboardButton("ᴊᴏɪɴ", url="https://t.me/JARVIS_V_SUPPORT"),
-        InlineKeyboardButton("ᴠᴇʀɪғʏ ✅", callback_data="verify_")
+        InlineKeyboardButton("ᴠᴇʀɪғʏ ✅", callback_data="home_")
     ],
 ])
 
