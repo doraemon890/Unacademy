@@ -3,7 +3,11 @@ from Ava.core.Documents import *
 
 # Define paths for each document category
 DOCUMENT_PATHS = {
-    "books": "Ava/core/Documents/books/",
+    "physics_hc_verma_sol": "Ava/core/Documents/physics_hc_verma_sol/",
+    "physics_hc_verma": "Ava/core/Documents/physics_hc_verma/",
+    "ali_bio": "Ava/core/Documents/ali_bio/",
+    "object_physics": "Ava/core/Documents/object_physics/",
+    "seep_pahuja_book": "Ava/core/Documents/seep_pahuja_book/",
     "notes_akansha_mam": "Ava/core/Documents/notes_akansha_mam/",
     "notes_seep_mam" : "Ava/core/Documents/notes_seep_mam/",
     "notes_anupam_sir": "Ava/core/Documents/notes_anupam_sir/",
@@ -92,6 +96,22 @@ modes_buttons = InlineKeyboardMarkup([
     ],
     [
         InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="home_")
+    ]
+])
+
+books_buttons = InlineKeyboardMarkup([
+    [   InlineKeyboardButton("ᴘʜʏsɪᴄs ʜᴄ ᴠᴇʀᴍᴀ", callback_data="physics_hc_verma_"),
+        InlineKeyboardButton("ʜᴄ ᴠᴇʀᴍᴀ sᴏʟᴜᴛɪᴏɴ 1&2", callback_data="physics_hc_verma_sol_")
+    ],
+    [
+        InlineKeyboardButton("sᴇᴇᴘ ᴘᴀʜᴜᴊᴀ", callback_data="seep_pahuja_book_")
+    ],
+    [
+        InlineKeyboardButton("ᴅʀ. ᴀʟɪ ʙɪᴏʟᴏɢʏ", callback_data="ali_bio_"),
+        InlineKeyboardButton("ᴏʙᴊᴇᴄᴛɪᴠᴇ ᴘʜʏsɪᴄs ғᴏʀ ɴᴇᴇᴛ", callback_data="object_physics_")
+    ],
+    [
+        InlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ ◀️", callback_data="modes_")
     ]
 ])
 
