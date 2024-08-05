@@ -10,7 +10,11 @@ from Ava.modules.structure import *
 
 # Define category mapping
 CATEGORY_MAPPING = {
-    "books_": "books",
+    "physics_hc_verma_sol_": "physics_hc_verma_sol",
+    "physics_hc_verma_": "physics_hc_verma",
+    "seep_pahuja_book_": "seep_pahuja_book",
+    "ali_bio_": "ali_bio",
+    "object_physics_": "object_physics",
     "notes_seep_mam_": "notes_seep_mam",
     "notes_akansha_mam_": "notes_akansha_mam",
     "notes_anupam_sir_": "notes_anupam_sir",
@@ -165,6 +169,8 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return script.FORCE_MSG.format(query.from_user.mention), force_buttons
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
+     elif callback_data.startswith("books_"):
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons    
     elif callback_data.startswith("notes_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ɴᴏᴛᴇs ᴄᴀᴛᴇɢᴏʀʏ.", notes_buttons
     elif callback_data.startswith("elps_"):
