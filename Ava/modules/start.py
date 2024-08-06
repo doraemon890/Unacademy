@@ -1,12 +1,13 @@
 from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
-from pyrogram.errors import FloodWait
+from pyrogram.errors import FloodWait, ChatAdminRequired
 from Ava import app
 from Ava.core import script
 from Ava.modules.structure import *
 import asyncio
 import os
 import random
+
 
 CATEGORY_MAPPING = {
     "physics_hc_verma_sol_": "physics_hc_verma_sol",
@@ -56,36 +57,42 @@ CATEGORY_MAPPING = {
 # Dictionary to keep track of user states
 user_states = {}
 
+async def get_channel_id(app, channel_link):
+    try:
+        chat = await app.get_chat(channel_link)
+        return chat.id
+    except Exception as e:
+        print(f"Failed to resolve chat ID for {channel_link}: {e}")
+        return None
+
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_CHANNELS:
-        channel_username = DOCUMENT_CHANNELS[category]
+        channel_link = DOCUMENT_CHANNELS[category]
+        channel_id = await get_channel_id(app, channel_link)
+        
+        if channel_id is None:
+            await app.send_message(chat_id, "Failed to access the channel.")
+            return
+        
         try:
-            async for message in app.get_chat_history(channel_username):
+            async for message in app.get_chat_history(channel_id):
                 if message.document and message.document.mime_type == "application/pdf":
                     file_name = message.document.file_name
                     file_id = message.document.file_id
                     try:
-                        # Download the document
                         file_path = await app.download_media(file_id)
-                        
-                        # Send the downloaded document
                         sent_message = await app.send_document(
                             chat_id,
                             file_path,
                             caption=file_name
                         )
-                        
-                        # Clean up the downloaded file
                         if file_path:
                             os.remove(file_path)
-                        
                         message_id = getattr(sent_message, 'id', None)
                         if message_id:
                             asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
                         else:
                             print(f"Failed to get message_id for document: {file_name}")
-
-                        # Introduce a delay of 2 seconds between sending each document
                         await asyncio.sleep(2)
                         
                     except FloodWait as e:
@@ -96,20 +103,20 @@ async def send_documents(app, chat_id, category):
                         print(f"Failed to send document {file_name}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
                     
-            # Send initial message
             initial_message = await app.send_message(
                 chat_id,
                 "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
             )
-
             initial_message_id = getattr(initial_message, 'id', None)
             if initial_message_id:
                 asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
             else:
                 print("Failed to get message_id for the initial message.")
         
+        except ChatAdminRequired:
+            await app.send_message(chat_id, "Bot needs to be an admin to access messages in the channel.")
         except Exception as e:
-            print(f"Failed to retrieve messages from {channel_username}: {e}")
+            print(f"Failed to retrieve messages from {channel_link}: {e}")
             await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
     else:
         await app.send_message(chat_id, "Invalid category.")
