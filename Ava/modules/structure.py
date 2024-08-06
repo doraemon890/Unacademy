@@ -2,7 +2,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from Ava.core.Documents import *
 
 # Define paths for each document category
-DOCUMENT_PATHS = {
+DOCUMENT_CHANNELS = {
     "physics_hc_verma_sol": "Ava/core/Documents/physics_hc_verma_sol/",
     "physics_hc_verma": "https://t.me/+-HSfVVIL2axkMTA1",
     "ali_bio": "Ava/core/Documents/ali_bio/",
