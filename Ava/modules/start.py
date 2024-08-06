@@ -130,12 +130,14 @@ async def edit_message_after_delay(app, chat_id, message_id, delay):
     except Exception as e:
         print(f"Failed to edit message {message_id}: {e}")
 
+# Function to delete a message after a delay
 async def delete_message_after_delay(app, chat_id, message_id, delay):
     await asyncio.sleep(delay)
     try:
         await app.delete_messages(chat_id, message_id)
     except Exception as e:
         print(f"Failed to delete message {message_id}: {e}")
+
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
@@ -160,15 +162,20 @@ async def handle_callback(_, query: CallbackQuery):
                 chat_id,
                 "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
             )
-            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.message_id, 5))
+            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.id, 5))
             return
 
+        # Set the user's state to the current category
         user_states[chat_id] = category
         await send_documents(app, chat_id, category)
         return
 
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
+
+    # Clear the user's state if no valid category is found
+    user_states[chat_id] = None
+
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
