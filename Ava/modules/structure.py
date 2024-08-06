@@ -4,7 +4,7 @@ from Ava.core.Documents import *
 # Define paths for each document category
 DOCUMENT_CHANNELS = {
     "physics_hc_verma_sol": "Ava/core/Documents/physics_hc_verma_sol/",
-    "physics_hc_verma": "https://t.me/+-HSfVVIL2axkMTA1",
+    "physics_hc_verma": "https://t.me/physics_hc_verma",
     "ali_bio": "Ava/core/Documents/ali_bio/",
     "object_physics": "Ava/core/Documents/object_physics/",
     "seep_pahuja_book": "https://t.me/+9cm3tcHacaM5MDNl",
