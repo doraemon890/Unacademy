@@ -1,12 +1,14 @@
-import os
-import asyncio
-import random
+check this code is perfect 
+
+
 from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
+from pyrogram.errors import FloodWait
 from Ava import app
 from Ava.core import script
-from Ava.core.Documents import *
-from Ava.modules.structure import *
+from Ava.modules.structure import DOCUMENT_CHANNELS
+import asyncio
+import os
 
 # Define category mapping
 CATEGORY_MAPPING = {
@@ -58,57 +60,55 @@ CATEGORY_MAPPING = {
 user_states = {}
 
 async def send_documents(app, chat_id, category):
-    if category in DOCUMENT_PATHS:
-        folder_path = DOCUMENT_PATHS[category]
-        if os.path.exists(folder_path):
-            document_files = [
-                f for f in os.listdir(folder_path)
-                if os.path.isfile(os.path.join(folder_path, f))
-            ]
-            if document_files:
-                category_message = await app.send_message(
-                    chat_id,
-                    f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}`"
-                )
-                category_message_id = getattr(category_message, 'id', None)
-                if category_message_id:
-                    asyncio.create_task(delete_message_after_delay(app, chat_id, category_message_id, 120))
-                else:
-                    print(f"Failed to get message_id for category message: {category}")
-
-                for doc in document_files:
+    if category in DOCUMENT_CHANNELS:
+        channel_username = DOCUMENT_CHANNELS[category]
+        try:
+            async for message in app.get_chat_history(channel_username):
+                if message.document and message.document.mime_type == "application/pdf":
+                    file_name = message.document.file_name
+                    file_id = message.document.file_id
                     try:
-                        file_path = os.path.join(folder_path, doc)
-                        with open(file_path, "rb") as file:
-                            sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
-                            message_id = getattr(sent_message, 'id', None)
-                            if message_id:
-                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
-                            else:
-                                print(f"Failed to get message_id for document: {doc}")
+                        # Download the document
+                        file_path = await app.download_media(file_id)
+                        
+                        # Send the downloaded document
+                        sent_message = await app.send_document(
+                            chat_id,
+                            file_path,
+                            caption=file_name
+                        )
+                        
+                        # Clean up the downloaded file
+                        if file_path:
+                            os.remove(file_path)
+                        
+                        message_id = getattr(sent_message, 'id', None)
+                        if message_id:
+                            asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
+                        else:
+                            print(f"Failed to get message_id for document: {file_name}")
                     except Exception as e:
-                        print(f"Failed to send document {doc}: {e}")
+                        print(f"Failed to send document {file_name}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
-                
-                # Send initial message
-                initial_message = await app.send_message(
-                    chat_id,
-                    "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
-                )
-                
-                initial_message_id = getattr(initial_message, 'id', None)
-                if initial_message_id:
-                    # Edit message after 120 seconds
-                    asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
-                else:
-                    print("Failed to get message_id for the initial message.")
+                    
+            # Send initial message
+            initial_message = await app.send_message(
+                chat_id,
+                "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+            )
+
+            initial_message_id = getattr(initial_message, 'id', None)
+            if initial_message_id:
+                asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
             else:
-                await app.send_message(chat_id, "No documents found in this category.")
-        else:
-            await app.send_message(chat_id, "Category folder not found.")
+                print("Failed to get message_id for the initial message.")
+        
+        except Exception as e:
+            print(f"Failed to retrieve messages from {channel_username}: {e}")
+            await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
     else:
         await app.send_message(chat_id, "Invalid category.")
-    
+
     user_states[chat_id] = None
 
 async def edit_message_after_delay(app, chat_id, message_id, delay):
@@ -144,7 +144,6 @@ async def handle_callback(_, query: CallbackQuery):
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         if user_states.get(chat_id):
-            # Send the warning message and schedule it for deletion
             warning_message = await app.send_message(
                 chat_id,
                 "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
@@ -158,7 +157,6 @@ async def handle_callback(_, query: CallbackQuery):
 
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
         await query.message.edit_text(new_text, reply_markup=new_markup)
-
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
