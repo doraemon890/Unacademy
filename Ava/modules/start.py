@@ -172,7 +172,7 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return script.FORCE_MSG.format(query.from_user.mention), force_buttons
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
-     elif callback_data.startswith("books_"):
+    elif callback_data.startswith("books_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons    
     elif callback_data.startswith("notes_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ɴᴏᴛᴇs ᴄᴀᴛᴇɢᴏʀʏ.", notes_buttons
