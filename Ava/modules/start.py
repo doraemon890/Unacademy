@@ -1,6 +1,3 @@
-check this code is perfect 
-
-
 from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
 from pyrogram.errors import FloodWait
@@ -9,8 +6,8 @@ from Ava.core import script
 from Ava.modules.structure import DOCUMENT_CHANNELS
 import asyncio
 import os
+import random
 
-# Define category mapping
 CATEGORY_MAPPING = {
     "physics_hc_verma_sol_": "physics_hc_verma_sol",
     "physics_hc_verma_": "physics_hc_verma",
@@ -54,7 +51,7 @@ CATEGORY_MAPPING = {
     "super_six_skc_sir_dpp_": "super_six_skc_sir_dpp",
     "super_six_rs_sir_course_": "super_six_rs_sir_course",
     "super_six_rs_sir_dpp_": "super_six_rs_sir_dpp",
-}
+ }
 
 # Dictionary to keep track of user states
 user_states = {}
@@ -87,6 +84,14 @@ async def send_documents(app, chat_id, category):
                             asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
                         else:
                             print(f"Failed to get message_id for document: {file_name}")
+
+                        # Introduce a delay of 2 seconds between sending each document
+                        await asyncio.sleep(2)
+                        
+                    except FloodWait as e:
+                        print(f"Flood wait error: {e}. Retrying after {e.x} seconds.")
+                        await asyncio.sleep(e.x)
+                        continue
                     except Exception as e:
                         print(f"Failed to send document {file_name}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
