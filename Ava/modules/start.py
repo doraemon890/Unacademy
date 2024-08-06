@@ -169,15 +169,13 @@ async def handle_callback(_, query: CallbackQuery):
             return
 
         user_states[chat_id] = category
-        await app.edit_message_text(
-            chat_id,
-            query.message.message_id,
-            text=new_text,
-            reply_markup=new_markup
-        )
-        await send_documents(app, chat_id, category)
-    else:
-        await app.send_message(chat_id, "Invalid option selected.")
+        return
+
+    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
+        await query.message.edit_text(new_text, reply_markup=new_markup)
+
+    # Clear the user's state if no valid category is found
+    user_states[chat_id] = None
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
