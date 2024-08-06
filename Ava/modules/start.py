@@ -59,6 +59,12 @@ user_states = {}
 
 async def get_channel_id(app, channel_link):
     try:
+        if channel_link.startswith("https://t.me/"):
+            channel_link = channel_link[len("https://t.me/"):]
+
+        if not channel_link.startswith("@"):
+            channel_link = "@" + channel_link
+
         chat = await app.get_chat(channel_link)
         return chat.id
     except Exception as e:
@@ -66,61 +72,60 @@ async def get_channel_id(app, channel_link):
         return None
 
 async def send_documents(app, chat_id, category):
-    if category in DOCUMENT_CHANNELS:
-        channel_link = DOCUMENT_CHANNELS[category]
-        channel_id = await get_channel_id(app, channel_link)
-        
-        if channel_id is None:
-            await app.send_message(chat_id, "Failed to access the channel.")
-            return
-        
-        try:
-            async for message in app.get_chat_history(channel_id):
-                if message.document and message.document.mime_type == "application/pdf":
-                    file_name = message.document.file_name
-                    file_id = message.document.file_id
-                    try:
-                        file_path = await app.download_media(file_id)
-                        sent_message = await app.send_document(
-                            chat_id,
-                            file_path,
-                            caption=file_name
-                        )
-                        if file_path:
-                            os.remove(file_path)
-                        message_id = getattr(sent_message, 'id', None)
-                        if message_id:
-                            asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
-                        else:
-                            print(f"Failed to get message_id for document: {file_name}")
-                        await asyncio.sleep(2)
-                        
-                    except FloodWait as e:
-                        print(f"Flood wait error: {e}. Retrying after {e.x} seconds.")
-                        await asyncio.sleep(e.x)
-                        continue
-                    except Exception as e:
-                        print(f"Failed to send document {file_name}: {e}")
-                        await app.send_message(chat_id, "Failed to send some documents.")
-                    
-            initial_message = await app.send_message(
-                chat_id,
-                "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
-            )
-            initial_message_id = getattr(initial_message, 'id', None)
-            if initial_message_id:
-                asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
-            else:
-                print("Failed to get message_id for the initial message.")
-        
-        except ChatAdminRequired:
-            await app.send_message(chat_id, "Bot needs to be an admin to access messages in the channel.")
-        except Exception as e:
-            print(f"Failed to retrieve messages from {channel_link}: {e}")
-            await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
-    else:
+    if category not in DOCUMENT_CHANNELS:
         await app.send_message(chat_id, "Invalid category.")
+        return
+    
+    channel_link = DOCUMENT_CHANNELS[category]
+    channel_id = await get_channel_id(app, channel_link)
+    
+    if channel_id is None:
+        await app.send_message(chat_id, "Failed to access the channel.")
+        return
 
+    try:
+        async for message in app.get_chat_history(channel_id):
+            if message.document and message.document.mime_type == "application/pdf":
+                file_name = message.document.file_name
+                file_id = message.document.file_id
+                
+                try:
+                    file_path = await app.download_media(file_id)
+                    sent_message = await app.send_document(
+                        chat_id,
+                        file_path,
+                        caption=file_name
+                    )
+                    if file_path:
+                        os.remove(file_path)
+                    message_id = getattr(sent_message, 'id', None)
+                    if message_id:
+                        asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
+                    else:
+                        print(f"Failed to get message_id for document: {file_name}")
+                    await asyncio.sleep(2)
+                except FloodWait as e:
+                    print(f"Flood wait error: {e}. Retrying after {e.x} seconds.")
+                    await asyncio.sleep(e.x)
+                except Exception as e:
+                    print(f"Failed to send document {file_name}: {e}")
+                    await app.send_message(chat_id, "Failed to send some documents.")
+                    
+        initial_message = await app.send_message(
+            chat_id,
+            "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+        )
+        initial_message_id = getattr(initial_message, 'id', None)
+        if initial_message_id:
+            asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
+        else:
+            print("Failed to get message_id for the initial message.")
+    except ChatAdminRequired:
+        await app.send_message(chat_id, "Bot needs to be an admin to access messages in the channel.")
+    except Exception as e:
+        print(f"Failed to retrieve messages from {channel_link}: {e}")
+        await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
+    
     user_states[chat_id] = None
 
 async def edit_message_after_delay(app, chat_id, message_id, delay):
@@ -130,14 +135,12 @@ async def edit_message_after_delay(app, chat_id, message_id, delay):
     except Exception as e:
         print(f"Failed to edit message {message_id}: {e}")
 
-# Function to delete a message after a delay
 async def delete_message_after_delay(app, chat_id, message_id, delay):
     await asyncio.sleep(delay)
     try:
         await app.delete_messages(chat_id, message_id)
     except Exception as e:
         print(f"Failed to delete message {message_id}: {e}")
-
 
 @app.on_message(filters.command("start"))
 async def start(_, message):
@@ -160,22 +163,21 @@ async def handle_callback(_, query: CallbackQuery):
         if user_states.get(chat_id):
             warning_message = await app.send_message(
                 chat_id,
-                "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
+                "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs ᴀᴛ ᴛʜᴇ sᴀᴍᴇ ᴛɪᴍᴇ ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ"
             )
-            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.id, 5))
+            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.id, 10))
             return
 
-        # Set the user's state to the current category
         user_states[chat_id] = category
+        await app.edit_message_text(
+            chat_id,
+            query.message.message_id,
+            text=new_text,
+            reply_markup=new_markup
+        )
         await send_documents(app, chat_id, category)
-        return
-
-    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
-        await query.message.edit_text(new_text, reply_markup=new_markup)
-
-    # Clear the user's state if no valid category is found
-    user_states[chat_id] = None
-
+    else:
+        await app.send_message(chat_id, "Invalid option selected.")
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
