@@ -3,7 +3,7 @@ from pyrogram.types import CallbackQuery
 from pyrogram.errors import FloodWait
 from Ava import app
 from Ava.core import script
-from Ava.modules.structure import DOCUMENT_CHANNELS
+from Ava.modules.structure import *
 import asyncio
 import os
 import random
