@@ -8,7 +8,6 @@ import asyncio
 import os
 import random
 
-
 CATEGORY_MAPPING = {
     "physics_hc_verma_sol_": "physics_hc_verma_sol",
     "physics_hc_verma_": "physics_hc_verma",
@@ -52,9 +51,8 @@ CATEGORY_MAPPING = {
     "super_six_skc_sir_dpp_": "super_six_skc_sir_dpp",
     "super_six_rs_sir_course_": "super_six_rs_sir_course",
     "super_six_rs_sir_dpp_": "super_six_rs_sir_dpp",
- }
+}
 
-# Dictionary to keep track of user states
 user_states = {}
 
 async def get_channel_id(app, channel_link):
@@ -71,7 +69,6 @@ async def get_channel_id(app, channel_link):
         print(f"Failed to resolve chat ID for {channel_link}: {e}")
         return None
 
-
 async def send_documents(app, chat_id, category):
     if category in DOCUMENT_CHANNELS:
         channel_link = DOCUMENT_CHANNELS[category]
@@ -82,7 +79,7 @@ async def send_documents(app, chat_id, category):
             return
 
         try:
-            async for message in app.get_chat_history(channel_id, limit=10):  # Adjust the limit as needed
+            async for message in app.get_chat_history(channel_id, limit=10):
                 if message.document and message.document.mime_type == "application/pdf":
                     file_name = message.document.file_name
                     file_id = message.document.file_id
@@ -112,7 +109,7 @@ async def send_documents(app, chat_id, category):
 
             initial_message = await app.send_message(
                 chat_id,
-                "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+                "📜 Please forward this material to any other chat or saved message within 2 minutes as it will be deleted to avoid copyright issues."
             )
             initial_message_id = getattr(initial_message, 'id', None)
             if initial_message_id:
@@ -127,7 +124,6 @@ async def send_documents(app, chat_id, category):
             await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
     else:
         await app.send_message(chat_id, "Invalid category.")
-
     
     user_states[chat_id] = None
 
@@ -166,20 +162,16 @@ async def handle_callback(_, query: CallbackQuery):
         if user_states.get(chat_id):
             warning_message = await app.send_message(
                 chat_id,
-                "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs ᴀᴛ ᴛʜᴇ sᴀᴍᴇ ᴛɪᴍᴇ ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ"
+                "You can't handle more than one request at a time. Please wait until the previous request is completed."
             )
-            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.id, 10))
-            return
-
-        user_states[chat_id] = category
-        await send_documents(app, chat_id, category)
-        return
-
-    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
-        await query.message.edit_text(new_text, reply_markup=new_markup)
-
-    # Clear the user's state if no valid category is found
-    user_states[chat_id] = None
+            await asyncio.sleep(5)
+            await app.delete_messages(chat_id, warning_message.message_id)
+        else:
+            user_states[chat_id] = category
+            await query.message.edit_text(new_text, reply_markup=new_markup)
+            await send_documents(app, chat_id, category)
+    else:
+        await query.message.edit_text("Invalid selection.")
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
@@ -191,7 +183,7 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
     elif callback_data.startswith("books_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons    
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons
     elif callback_data.startswith("notes_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ɴᴏᴛᴇs ᴄᴀᴛᴇɢᴏʀʏ.", notes_buttons
     elif callback_data.startswith("elps_"):
@@ -203,13 +195,13 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     elif callback_data.startswith("supersix_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴜᴘᴇʀ sɪx ᴄᴀᴛᴇɢᴏʀʏ.", supersix_buttons
     elif callback_data.startswith("super_six_prateek_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_prateek_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_prateek_sir
     elif callback_data.startswith("super_six_akm_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_akm_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_akm_sir
     elif callback_data.startswith("super_six_skc_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_skc_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_skc_sir
     elif callback_data.startswith("super_six_rs_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_rs_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_rs_sir
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
     else:
