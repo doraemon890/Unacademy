@@ -169,6 +169,7 @@ async def handle_callback(_, query: CallbackQuery):
             return
 
         user_states[chat_id] = category
+        await send_documents(app, chat_id, category)
         return
 
     if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
