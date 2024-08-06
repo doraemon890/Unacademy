@@ -1,13 +1,14 @@
+import os
+import asyncio
+import random
 from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
-from pyrogram.errors import FloodWait, ChatAdminRequired
 from Ava import app
 from Ava.core import script
+from Ava.core.Documents import *
 from Ava.modules.structure import *
-import asyncio
-import os
-import random
 
+# Define category mapping
 CATEGORY_MAPPING = {
     "physics_hc_verma_sol_": "physics_hc_verma_sol",
     "physics_hc_verma_": "physics_hc_verma",
@@ -53,75 +54,58 @@ CATEGORY_MAPPING = {
     "super_six_rs_sir_dpp_": "super_six_rs_sir_dpp",
 }
 
+# Dictionary to keep track of user states
 user_states = {}
 
-async def get_channel_id(app, channel_link):
-    try:
-        if channel_link.startswith("https://t.me/"):
-            channel_link = channel_link[len("https://t.me/"):]
-
-        if not channel_link.startswith("@"):
-            channel_link = "@" + channel_link
-
-        chat = await app.get_chat(channel_link)
-        return chat.id
-    except Exception as e:
-        print(f"Failed to resolve chat ID for {channel_link}: {e}")
-        return None
-
 async def send_documents(app, chat_id, category):
-    if category in DOCUMENT_CHANNELS:
-        channel_link = DOCUMENT_CHANNELS[category]
-        channel_id = await get_channel_id(app, channel_link)
+    if category in DOCUMENT_PATHS:
+        folder_path = DOCUMENT_PATHS[category]
+        if os.path.exists(folder_path):
+            document_files = [
+                f for f in os.listdir(folder_path)
+                if os.path.isfile(os.path.join(folder_path, f))
+            ]
+            if document_files:
+                category_message = await app.send_message(
+                    chat_id,
+                    f"`ᴛʜᴇsᴇ ᴀʀᴇ ᴛʜᴇ ᴍᴀᴛᴇʀɪᴀʟs ғᴏʀ ᴛʜᴇ : {category.replace('_', ' ').title()}`"
+                )
+                category_message_id = getattr(category_message, 'id', None)
+                if category_message_id:
+                    asyncio.create_task(delete_message_after_delay(app, chat_id, category_message_id, 120))
+                else:
+                    print(f"Failed to get message_id for category message: {category}")
 
-        if channel_id is None:
-            await app.send_message(chat_id, "Failed to access the channel.")
-            return
-
-        try:
-            async for message in app.get_chat_history(channel_id, limit=10):
-                if message.document and message.document.mime_type == "application/pdf":
-                    file_name = message.document.file_name
-                    file_id = message.document.file_id
+                for doc in document_files:
                     try:
-                        file_path = await app.download_media(file_id)
-                        sent_message = await app.send_document(
-                            chat_id,
-                            file_path,
-                            caption=file_name
-                        )
-                        if file_path:
-                            os.remove(file_path)
-                        message_id = getattr(sent_message, 'id', None)
-                        if message_id:
-                            asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
-                        else:
-                            print(f"Failed to get message_id for document: {file_name}")
-                        await asyncio.sleep(2)
-
-                    except FloodWait as e:
-                        print(f"Flood wait error: {e}. Retrying after {e.x} seconds.")
-                        await asyncio.sleep(e.x)
-                        continue
+                        file_path = os.path.join(folder_path, doc)
+                        with open(file_path, "rb") as file:
+                            sent_message = await app.send_document(chat_id, file, file_name=doc, caption=doc)
+                            message_id = getattr(sent_message, 'id', None)
+                            if message_id:
+                                asyncio.create_task(delete_message_after_delay(app, chat_id, message_id, 120))
+                            else:
+                                print(f"Failed to get message_id for document: {doc}")
                     except Exception as e:
-                        print(f"Failed to send document {file_name}: {e}")
+                        print(f"Failed to send document {doc}: {e}")
                         await app.send_message(chat_id, "Failed to send some documents.")
-
-            initial_message = await app.send_message(
-                chat_id,
-                "📜 Please forward this material to any other chat or saved message within 2 minutes as it will be deleted to avoid copyright issues."
-            )
-            initial_message_id = getattr(initial_message, 'id', None)
-            if initial_message_id:
-                asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
+                
+                # Send initial message
+                initial_message = await app.send_message(
+                    chat_id,
+                    "📜 ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴀᴛᴇʀɪᴀʟ ᴛᴏ ᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛ ᴏʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇ ᴡɪᴛʜɪɴ 2 ᴍɪɴᴜᴛᴇs ᴀs ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ᴛᴏ ᴀᴠᴏɪᴅ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs."
+                )
+                
+                initial_message_id = getattr(initial_message, 'id', None)
+                if initial_message_id:
+                    # Edit message after 120 seconds
+                    asyncio.create_task(edit_message_after_delay(app, chat_id, initial_message_id, 120))
+                else:
+                    print("Failed to get message_id for the initial message.")
             else:
-                print("Failed to get message_id for the initial message.")
-
-        except ChatAdminRequired:
-            await app.send_message(chat_id, "Bot needs to be an admin to access messages in the channel.")
-        except Exception as e:
-            print(f"Failed to retrieve messages from {channel_link}: {e}")
-            await app.send_message(chat_id, "Failed to retrieve documents from the channel.")
+                await app.send_message(chat_id, "No documents found in this category.")
+        else:
+            await app.send_message(chat_id, "Category folder not found.")
     else:
         await app.send_message(chat_id, "Invalid category.")
     
@@ -160,18 +144,21 @@ async def handle_callback(_, query: CallbackQuery):
     category = CATEGORY_MAPPING.get(callback_data)
     if category:
         if user_states.get(chat_id):
+            # Send the warning message and schedule it for deletion
             warning_message = await app.send_message(
                 chat_id,
-                "You can't handle more than one request at a time. Please wait until the previous request is completed."
+                "ʏᴏᴜ ᴄᴀɴ'ᴛ ᴜsᴇ ᴛᴡᴏ ᴏᴘᴛɪᴏɴs sɪᴍᴜʟᴛᴀɴᴇᴏᴜsʟʏ. ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴜɴᴛɪʟ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ɪs ғɪɴɪsʜᴇᴅ."
             )
-            await asyncio.sleep(5)
-            await app.delete_messages(chat_id, warning_message.message_id)
-        else:
-            user_states[chat_id] = category
-            await query.message.edit_text(new_text, reply_markup=new_markup)
-            await send_documents(app, chat_id, category)
-    else:
-        await query.message.edit_text("Invalid selection.")
+            asyncio.create_task(delete_message_after_delay(app, chat_id, warning_message.message_id, 5))
+            return
+
+        user_states[chat_id] = category
+        await send_documents(app, chat_id, category)
+        return
+
+    if new_text and (query.message.text != new_text or query.message.reply_markup != new_markup):
+        await query.message.edit_text(new_text, reply_markup=new_markup)
+
 
 async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     if callback_data.startswith("home_"):
@@ -182,8 +169,8 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
         return script.FORCE_MSG.format(query.from_user.mention), force_buttons
     elif callback_data.startswith("modes_"):
         return script.MODES_TXT, modes_buttons
-    elif callback_data.startswith("books_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons
+     elif callback_data.startswith("books_"):
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ʙᴏᴏᴋ ᴄᴀᴛᴇɢᴏʀʏ.", books_buttons    
     elif callback_data.startswith("notes_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ ɴᴏᴛᴇs ᴄᴀᴛᴇɢᴏʀʏ.", notes_buttons
     elif callback_data.startswith("elps_"):
@@ -195,13 +182,13 @@ async def get_new_text_and_markup(query: CallbackQuery, callback_data: str):
     elif callback_data.startswith("supersix_"):
         return "•➥ ᴄʜᴏᴏsᴇ ᴀ sᴜᴘᴇʀ sɪx ᴄᴀᴛᴇɢᴏʀʏ.", supersix_buttons
     elif callback_data.startswith("super_six_prateek_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_prateek_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀ ᴘʀᴀᴛᴇᴇᴋ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_prateek_sir
     elif callback_data.startswith("super_six_akm_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_akm_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ᴀᴋᴍ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_akm_sir
     elif callback_data.startswith("super_six_skc_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_skc_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ sᴋᴄ sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_skc_sir
     elif callback_data.startswith("super_six_rs_sir_"):
-        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx ᴍᴀᴛᴇʀɪᴀʟ.", supersix_buttons_rs_sir
+        return "•➥ ᴄʜᴏᴏsᴇ ᴀɴ ʀs sɪʀ sᴜᴘᴇʀ sɪx material.", supersix_buttons_rs_sir
     elif callback_data.startswith("premium_"):
         return await get_premium_buttons(callback_data)
     else:
